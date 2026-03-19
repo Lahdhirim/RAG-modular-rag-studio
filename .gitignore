@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 .pre-commit-config.yaml
+.ruff_cache/
+commands.txt
