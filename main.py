@@ -1,16 +1,17 @@
-import streamlit as st
-import tempfile
-from pathlib import Path
-import fitz
-from PIL import Image
-import easyocr
-import numpy as np
-from dotenv import load_dotenv
 import os
+import tempfile
 from concurrent.futures import ThreadPoolExecutor
-from langchain_text_splitters import CharacterTextSplitter
+from pathlib import Path
+
+import easyocr
+import fitz
+import numpy as np
+import streamlit as st
+from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
+from langchain_text_splitters import CharacterTextSplitter
+from PIL import Image
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
