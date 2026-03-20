@@ -1,9 +1,12 @@
+import hashlib
 import multiprocessing
 import os
 import shutil
 import tempfile
+import uuid
 from pathlib import Path
 
+import fitz
 import numpy as np
 import streamlit as st
 import torch
@@ -22,6 +25,11 @@ from src.config_loader import load_config
 from src.utils.logger_config import logger
 
 
+def generate_file_id(uploaded_file):
+    file_bytes = uploaded_file.getbuffer()
+    return hashlib.sha256(file_bytes).hexdigest()
+
+
 def get_converter(ocr: bool = False):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"Using device: {device} | OCR mode: {ocr}")
@@ -35,8 +43,8 @@ def get_converter(ocr: bool = False):
             else {}
         ),
         images_scale=1,
-        generate_page_images=False,
-        generate_picture_images=False,
+        generate_page_images=True,
+        generate_picture_images=True,
         accelerator_options=AcceleratorOptions(
             num_threads=multiprocessing.cpu_count(), device=device
         ),
@@ -62,23 +70,49 @@ def get_ocr_converter():
 
 
 def pdf_to_text(pdf_path, converter):
+    doc = fitz.open(pdf_path)
 
-    result = converter.convert(pdf_path)
-    doc = result.document
+    full_text = ""
+    total_pages = len(doc)
 
-    # Pages
-    logger.info(f"Total pages: {len(result.pages)}")
+    logger.info(f"Total pages detected: {total_pages}")
 
-    # Pictures
-    logger.info(f"Total pictures detected: {len(doc.pictures)}")
-    for i, pic in enumerate(doc.pictures):
-        logger.info(f"Picture {i} - Caption: {pic.caption_text(doc)}")
+    for i in range(total_pages):
+        logger.info(f"Processing page {i+1}/{total_pages}")
 
-    # TODO: Add image OCR
+        single_page_doc = fitz.open()
+        single_page_doc.insert_pdf(doc, from_page=i, to_page=i)
 
-    text = doc.export_to_text()
-    logger.info(f"Extracted text from {pdf_path}")
-    return text
+        temp_path = None
+        try:
+            temp_path = os.path.join(
+                tempfile.gettempdir(), f"page_{i}_{uuid.uuid4().hex}.pdf"
+            )
+            single_page_doc.save(temp_path)
+            single_page_doc.close()
+
+            result = converter.convert(temp_path)
+            docling_doc = result.document
+
+            page_text = docling_doc.export_to_text()
+
+            full_text += f"\n\n--- Page {i+1} ---\n\n{page_text}"
+
+        except Exception as e:
+            logger.error(f"Error on page {i+1}: {e}")
+
+        finally:
+            if os.path.exists(temp_path):
+                try:
+                    os.remove(temp_path)
+                except Exception as e:
+                    logger.warning(f"Could not delete temp file {temp_path}: {e}")
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+    doc.close()
+    return full_text
 
 
 def chunk_text(text):
@@ -176,7 +210,7 @@ if __name__ == "__main__":
             with tempfile.TemporaryDirectory() as tmpdir:
                 for uploaded_file in uploaded_files:
                     filename = Path(uploaded_file.name).stem
-                    file_id = f"{filename}"
+                    file_id = generate_file_id(uploaded_file)
 
                     # Skip if already processed in this session
                     if file_id in st.session_state["parsing_results"]:
@@ -267,7 +301,7 @@ if __name__ == "__main__":
             # Compute cosine similarity
             similarities = matrix @ query_vec
 
-            # Get top 5 most relevant chunks and filter by similarity threshold
+            # Get top k most relevant chunks and filter by similarity threshold
             best_indexes = np.argsort(similarities)[-5:]
             filtered_indexes = [
                 best_index

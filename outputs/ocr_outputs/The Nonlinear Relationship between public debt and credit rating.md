@@ -1,6 +1,16 @@
+
+
+--- Page 1 ---
+
+
+
+--- Page 2 ---
+
 The Nonlinear Relationship Between Public Debt and Sovereign Credit Ratings by Metodij Hadzi-Vaskov and Luca Antonio Ricci
 
 IMF Working Papers describe research in progress by the author(s) and are published to elicit comments and to encourage debate. The views expressed in IMF Working Papers are those of the author(s) and do not necessarily represent the views of the IMF, its Executive Board, or IMF management.
+
+--- Page 3 ---
 
 IMF Working Paper
 
@@ -22,6 +32,8 @@ Keywords: Credit ratings, Public debt, Credit rating agencies, Financial markets
 
 Author's E-Mail Address: mhadzivaskov@imf.org, lricci@imf.org
 
+--- Page 4 ---
+
 I. INTRODUCTION
 
 Higher levels of public debt generally increase fiscal vulnerabilities and raise concerns about the sovereign's capacity and ability to service debt obligations. As such, higher debt levels are expected to be associated with perceptions of lower creditworthiness, and result in weaker sovereign credit ratings. This relationship is illustrated in Figure 1 using credit ratings data from Fitch Ratings and government debt-to-GDP ratios over the period 1998-2014. As expected, countries with higher debt-to-GDP ratios also tend to have lower sovereign credit ratings. Figure 1 also shows some clear differences between Emerging Markets and Developing Economies (EMDEs) and Advanced Economies (AEs)-for the same level of debt AEs typically have higher credit ratings than EMDEs-as well as within each country grouping. Exceptions from this pattern are visible for example in a few AEs that enjoy very high credit ratings despite also having high debt levels (as they are considered safe heavens) as well as some developing economies with both low debt levels and low credit ratings (as they have limited access to market). This relationship holds both for gross debt (Panel A) and net debt (Panel B), defined as the difference between general government gross debt and financial assets corresponding to debt instruments. 1
@@ -29,6 +41,8 @@ Higher levels of public debt generally increase fiscal vulnerabilities and raise
 This paper formally investigates the empirical relation between public debt and sovereign credit ratings using alternative analytical methods. There are three main reasons for the focus on debt when assessing ratings. First, debt is generally found to be one of the most important
 
 1 See IMF (2014) for definitions of gross debt, net debt, and government financial assets. The distinction between gross and net debt is important as they may have different impact on economic and financial performance. For instance, see Hadzi-Vaskov and Ricci (forthcoming) for the impact of gross and net debt on sovereign bond spreads. As net debt lowers the sample, we will focus mainly on gross debt and use net debt as robustness.
+
+--- Page 5 ---
 
 explanatory variables for credit ratings (e.g. see Afonso, Gomes, and Rother, 2011; Brůha et al., 2017). Second, the findings from a dominance analysis, which explores the relative importance of various explanatory variables, suggests that debt may be more important than other factors in explaining sovereign ratings. Third, among the important factors affecting sovereign credit ratings, public debt is a key one that policymakers can directly influence.
 
@@ -41,6 +55,8 @@ The determinants of sovereign credit ratings have been the topic of investigatio
 Afonso, Gomes, and Rother (2011) conclude that changes in GDP per capita, GDP growth, government debt, and the fiscal balance have a short-run impact, while government effectiveness, external debt, level of foreign reserves, and default history play a role as longterm determinants of credit ratings. Bissoondoyal-Bheenick (2005) suggests that the relevance of economic variables is not uniform across the different rating categories and country groups, as the importance assigned by credit rating agencies to different economic variables seems to depend on the level of economic development. In this context, a number of studies aim to reproduce sovereign ratings as a function of broad set of economic determinants (see Bissoondoyal-Bheenick, 2005; Mora, 2006; Afonso, Gomes, and Rother, 2011; Gaillard, 2014). Boumparis et al. (2015) show that Euro-zone countries undergoing a crisis faced a stronger rating penalty.
 
 The approach in this analysis is related, though distinct from the set of empirical studies. First, this study focuses in particular on the impact of public debt-to-GDP ratio on sovereign credit ratings employing a wide range of analytical techniques, specifications, and country groupings. Second, it investigates the nonlinear nature of such relationship and how such nonlinearity relates to differences between advanced economies and emerging markets and developing economies.
+
+--- Page 6 ---
 
 III.   DATASET AND EMPIRICAL STRATEGY
 
@@ -58,6 +74,12 @@ Before moving to the formal empirical tests, this section provides a description
 
 3 The relationship between debt and sovereign credit ratings for the country groupings looks very similar when debt is measured in net terms (available upon request).
 
+--- Page 7 ---
+
+
+
+--- Page 8 ---
+
 A key observation that comes to mind from such a figure, especially when comparing AEs and EMDEs, is that richer and more developed countries are likely to also have in place better institutional frameworks and enjoy perceptions of better creditworthiness. Figure 3 provides visual evidence in support of such conjectures, showing a positive relationship between countries' higher GDP per capita and their sovereign credit ratings. The relation was indeed highlighted in various studies such as Bissoondoyal-Bheenick (2005). As we will see, even controlling for GDP per capita, some differences in AE and EMDC will persist, and we will show that such remaining difference is related to the nonlinear nature of the relation between debt and rating.
 
 C.   Relevance of debt
@@ -68,11 +90,15 @@ The dominance analysis results are reported in Annex I and suggest that public d
 
 4  For discussion of dominance analysis see Budescu (1993), Grömping (2007), and Luchman (2014).
 
+--- Page 9 ---
+
 D.   Rating data categorization
 
 The study employs the categorization of the 23 Fitch rating categories, where 1 refers to the lowest, and 23 to the highest credit rating category. For the purpose of splitting the sample when assessing differences across AEs and EMDEs, credit ratings are divided into three categories on the basis of standard conventions and data availability. As shown in Table 1, dividing the ratings into investment grade and non-investment grade (a standard distinction widely used by financial markets) and then dividing the investment grade group into two equal rating ranges, offers three categories, which divide the sample of AE and EMDEs quite conveniently. The green area in Table 1 depicts rating grades DD to BB+ (or categorizations 1 to 13), which is named Non-Investment Grade (NIG) as it coincides with the grades below the investment grade threshold; for this category of rating, the available data belongs mainly to the EMDEs set of countries. 5 Similarly, at the other extreme, the yellow area depicts the grades A+ to AAA (or categorizations 19 to 23), and is named High-Investment Grade (HIG) as it encompasses the higher half of the ratings categories in the investment grade group; this category of rating contains mainly AEs. Finally, there is an intermediate range of rating, which is above the investment-grade threshold, but encompasses the lower half of the investment grade group and-hence, it is named Low-Investment Grade (LIG). Such a category of rating is marked in white and encompasses both AE and EMDEs. These three categories will turn out to be useful when we will check the extent to which our nonlinearity explains the difference between AEs and EMDEs.
 
 5 In the context of rolling regressions with five consecutive credit rating grades, we impose a minimum of 30 country-year observations.
+
+--- Page 10 ---
 
 Table 1. Credit Ratings Data (Distribution across country groups)
 
@@ -93,6 +119,8 @@ where the dependent variable 𝑦𝑦 𝑖𝑖𝑖𝑖 ∗ is the country i 's c
 
 <!-- formula-not-decoded -->
 
+--- Page 11 ---
+
 and 𝐷𝐷 𝑖𝑖𝑖𝑖 stands for (gross or net) debt to GDP ratio of country i in year t , while X stands for the set of control variables for country i in year t . The regression encompasses countryspecific fixed effects ( ui ).
 
 Panel OLS-Fixed Effects Regressions
@@ -109,6 +137,8 @@ A.   The negative relationship between debt and credit ratings
 
 The results in Table 2 confirm the findings of other empirical studies that higher public debt is associated with worse sovereign credit ratings. The results from the ordered probit that treats all 23 rating grades as categories of the dependent variable (i.e. one ordered probit category for each credit rating grade) in the first column indicates that an increase in debt ratio implies lower probability of being placed in a better rating category. These results are also fully consistent and similar in magnitude with the results reported in the second column from the fixed-effects panel regressions that include the same 23 rating grades as values for the dependent variable: they imply that an increase in the debt ratio by 10 percent of GDP is associated with almost half a notch lower credit rating.
 
+--- Page 12 ---
+
 Table 2. Regression Results (Full sample, Gross debt)
 
 Note: Dependent variable is the rating category, which 23 values, corresponding to the 23 credit rating grades. GDP per capita is PPP-adjusted.
@@ -118,6 +148,8 @@ The specifications also include various controls, commonly employed in the liter
 It is important to notice that the level of development as proxied by GDP per capita is highly significant, confirming the visual relation highlighted in section III.B. This is quite important as we will show that the residual difference between AEs and EMDEs, after controlling for GDP per capita, is actually apparent, and mainly related to the nonlinear nature of the relationship.
 
 Having presented the findings of the general debt-ratings relationship in Table 2, the analysis now turns to the subtleties of this relationship. Is the negative impact of public debt on sovereign credit ratings uniform across rating grades and/or country groups?
+
+--- Page 13 ---
 
 B.   Uncovering the non-linearity across credit rating grades
 
@@ -131,9 +163,13 @@ There are possible explanations behind these findings. For countries with alread
 
 6 Key findings are similar when using alternative credit rating windows (from 4-grade, 6-grade, and 7-grade rolling windows, results available upon request).
 
+--- Page 14 ---
+
 Figure 5 shows that, consistently with the above results, also the marginal probabilities of being placed in a different rating grade within the rolling 5-grade windows after the debt increase show the same non-linear pattern. Each of the five lines (marked as 1 to 5) in the left panel shows the marginal probability of falling in a particular grade (respectively first to fifth) within the respective 5-grade window (indicated in the horizontal axis), in response to an increase in debt. Within each 5-grade window (identified by each particular point on the horizontal axis) there is much higher probability of falling into the lower grades (grade 1 or 2) for credit grades in the middle of the credit rating distribution than in the extremes of such distribution. Correspondingly, the marginal probabilities of being placed in a better rating grade (grade 4 or 5), after a debt increase, is also much more negative for the middle area.
 
 The right panel of Figure 5 shows such outcome more clearly, by averaging the two top and bottom lines, which represent the average marginal probabilities of falling in grades 1 and 2 or 4 and 5, respectively, in response to a debt increase. It is clear that in the middle range of ratings (i.e. windows broadly encompassing LIG), where the marginal probability is about 0.005, a debt increase by 10 percent of GDP is associated with about a 5 percent higher (lower) probability of being placed into a worse (better) category within the corresponding 5grade window. For lower ratings (in the NIG group), the effect is smaller and eventually close to zero for the lowest ratings. For higher ratings (in the HIG group), the effect is somewhere in the middle, at around a 3 percent change in probability for a 10 percent change in debt.
+
+--- Page 15 ---
 
 Panel OLS-FE regressions
 
@@ -141,15 +177,27 @@ These findings of non-linearity and asymmetric U-shape peculiar based on the ord
 
 In terms of quantifying the effect, in the middle range of ratings (about the LIG group), a debt increase by 10 percent of GDP is associated with a decline in rating of almost ½ of a notch, which amounts to about 10-15 percent of one standard deviation. Similar as the ordered probit findings, the effect declines for lower ratings (in the NIG group), and eventually gets close to zero for the lowest ratings. For higher ratings (in the HIG group), the effect is again somewhere in the middle (about ¼ of a notch).
 
+--- Page 16 ---
+
 Institutional Investor Index
 
 The Institutional Investor Index offers an alternative way of capturing investors' perception about countries' sovereign risk, thus allowing us to base our analysis on a different proxy for rating to be used as left hand side variable. The index, which ranges from 0 (worst) to 100 (best), is closely correlated with countries' credit ratings, as shown in Figure 7.
 
+--- Page 17 ---
+
 Th same nonlinear relation is supported by the indicators of sovereign creditworthiness offered by the Institutional Investors Index. Figure 8 indeed suggests a very similar pattern in the coefficient estimates from panel regressions (fixed effects) that replace the credit rating with the Institutional Investors Index as the dependent variable. Each point depicts the coefficient estimate from a 5-grade rolling window consistent with those used in Figures 4 and 6.
+
+--- Page 18 ---
 
 An alternative check for the Institutional Investors Index is provided in Figure 9, which presents the coefficients from panel regressions in which the rolling windows are defined as 20-point ranges of Institutional Investors Index values, repeated every 5-points. This is meant to mimic the 5-grade rolling window, based on the Fitch rating, used above. The general finding of an asymmetric U-shape remains valid, with the 'middle range' of countries again being punished the most in terms of Institutional Investors Index by debt increases. The results suggest that a debt increase of 10 percent of GDP is associated with a decline in the index by up to 2 ½ units, or about 10-15 percent of one standard deviation, for the ratings in the middle range. 7  The effect is halved for the group of best rating grades, and even smaller for the worse ratings.
 
 7 The results here based on the investor index are consistent with those from specification that have the credit ratings as the dependent variable, given the different ranges of the dependent variable (1-23 in the case of credit ratings and 0-100 in the case of the investor index): indeed, a commensurate debt increase is associated with a 10-15 percent of one standard deviation deterioration in both cases.
+
+--- Page 19 ---
+
+
+
+--- Page 20 ---
 
 C.   The non-linearity explains differences across AEs and EMDEs
 
@@ -161,6 +209,8 @@ Panel B shows how the answer is related to the nonlinearity uncovered in the pre
 
 8 The standard control variables have the expected effects, with higher GDP per capita and better growth performance being associated with better ratings, and higher inflation with lower ratings, while the effect of VIX is insignificant.
 
+--- Page 21 ---
+
 Hence, two factors explain the apparent difference in the effect of debt on ratings for AEs and EMDEs (and seemingly counterintuitive result) visible in Table 3: the nonlinear relation of debt on ratings across ratings grades (i.e. different levels of sensitivity to debt increases across rating grades), and the uneven distribution of AEs and EMDEs across credit rating grades.
 
 Table 3. Ordered Probit Results for Credit Ratings (Fixed effects; Gross debt)
@@ -169,6 +219,8 @@ Panel A
 
 Panel B
 
+--- Page 22 ---
+
 Table 4 presents results from panel regressions (based on 23-value dependent variable and allowing for country-specific fixed effects) that confirm the findings from the ordered probit regressions: the non-linearity of the debt-ratings relationship across credit rating grades explains the differences between AEs and EMDEs. Again, the effect of debt on credit ratings is found to be stronger for AEs than for EMDEs, for the respective general sample encompassing different ratings groups. As in the case of ordered probit regressions, Panel B of Table 4 suggests that the effect of debt on credit ratings is similar for AEs and EMDEs that belong to the same rating category; but differs considerable across rating categories. Within the category that includes significant numbers of both AEs and EMDEs (LIG), the estimated effects for AEs and EMDEs are very similar (-0.030 for AEs vs.-0.038 for EMDEs). However, important differences among the rating categories remain-LIG have largest estimated effect, HIG smaller, and NIG have the smallest effect, in absolute terms. These findings are fully consistent with the ordered probit results in Table 3 and the results from various rolling regressions in Figures 4 and 6 and suggest that the differences in the estimated effects between AEs and EMDEs are explained by the differences in their distributions across rating categories, coupled with the nonlinear relationship.
 
 When quantifying the effects for the average country in each of the three ratings group (NIG, LIG, HIG), we find that a debt increase of 10 percent of GDP is associated with almost ½ of a notch lower rating for LIG, which are consistent with the results from Figure 6. The effect is smaller for the lowest rating in NIG group, about 1/6 of a notch, and it is somewhere in the middle (about ¼ of a notch) for the best credit rating in HIG group.
@@ -176,6 +228,8 @@ When quantifying the effects for the average country in each of the three rating
 It is quite interesting to notice that the nonlinear relation is also consistent with a breakdown of the EMDEs into different regional groups (which is an exogenous breakdown). Indeed, different average ratings across regions are related to different relations between debt and ratings: Annex II shows (both in a Table and in a Figure) the average rating for each country grouping across the regression sample, as well as the coefficient estimates from regression equivalent to the one in column 1 of Table 4, but run for different regional samples. Quite remarkably, EMDEs regions with higher average rating (like Emerging Asia, Emerging Europe, and MENA) tend to have a higher slope than EMDEs regions with lower average ratings (such as CIS and SSA; with the exception of LAC that behaves closer to countries with higher ratings), a result fully consistent with the main findings of nonlinearity. 9
 
 9 A similar regional pattern emerges when exploring the partial regression plot for debt on ratings-controlling for the other variables (Avplot in Stata) as from the same specification in column 1 of Table 4-but calculated for each region separately (results available upon request).
+
+--- Page 23 ---
 
 Table 4. Panel Regression Results for Credit Ratings (Fixed effects; Gross debt)
 
@@ -195,6 +249,8 @@ Panel B
 
 pval in parentheses *** p<0.01, ** p<0.05, * p<0.1
 
+--- Page 24 ---
+
 Finally, Table 5 reports results from panel regressions that replace the rating variable/grade with the Institutional Investor Index as the dependent variable of interest. Similar as the results from ordered probit and panel regressions, it confirms the negative impact of public debt on sovereign credit ratings. As seen before, the effect is the strongest for LIG, followed by HIG, and NIG, explaining the differences already seen between AEs and EMDEs.
 
 Table 5. Panel Regression Results (Fixed effects; Gross debt)
@@ -212,6 +268,8 @@ Panel B
 
 Note: Dependent variable is the Institutional Investor Index of country sovereign risk.
 
+--- Page 25 ---
+
 V.   ROBUSTNESS
 
 This section investigates the robustness of the empirical findings to alternative specifications. First, gross debt is replaced by net debt as the relevant public debt variable. Second, given the attention paid to diversification in some credit ratings reports (see, for instance, Fitch Ratings report for Chile from March 2019), the analysis includes an indicator of export diversification. Third, the analysis accounts for the persistence of credit ratings by including lagged dependent variables in the empirical specification. Fourth, it checks the sensitivity of the key findings when ordered logit is employed instead of ordered probit.
@@ -220,14 +278,18 @@ A.   Net Debt
 
 Tables 6, 7, 8, and 9 show the sensitivity of the results to the replacement of gross debt by net debt, which may provide additional information about the countries' creditworthiness. Table 6 shows that the negative relationship between debt and credit ratings remains intact in the overall sample. In addition, similar as in Table 2, the results from ordered probit and panel regressions are virtually identical. Tables 7 and 8 provide the full estimation results from the ordered probit and panel regressions for various country groups and credit rating categories. All key results are robust to the replacement of gross debt by the net debt variable. Namely: the effect of debt on credit ratings continues to be larger for AEs than for EMDEs; the effect differs across credit rating categories and remains the strongest for LIG, followed by HIG, and NIG; but, within the LIG group the effect is virtually the same for AEs and EMDEs. Finally, the results for the Institutional Investor Index from Table 5 are confirmed by the results in Table 9, where the effect remains the strongest for LIG, smaller for HIG, and the smallest for NIG.
 
-| Table 6. Regression Results  (Full sample, Net debt)  Note:  Dependent variable is the rating category, which assumes 23 values, corresponding to the 23  credit rating grades. GDP per capita is PPP-adjusted.   |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Table 6. Regression Results  (Full sample, Net debt)  Note: Dependent variable is the rating category, which assumes 23 values, corresponding to the 23 credit rating grades. GDP per capita is PPP-adjusted.   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+--- Page 26 ---
 
 Table 7. Ordered Probit Results for Credit Ratings (Fixed effects; Net debt)
 
 Panel A
 
 Panel B
+
+--- Page 27 ---
 
 Table 8. Panel Regression Results for Credit Ratings (Fixed effects; Net debt)
 
@@ -244,6 +306,8 @@ Panel B
 
 | Full sample  EMDEs  Full sample  EMDEs  Full sample  AEs  Net debt  -0.0148**  -0.0168**  -0.0437***  -0.0536***  -0.0243***  -0.0247***  (0.0257)  (0.0129)  (1.66e-05)  (8.74e-06)  (3.95e-06)  (6.73e-06)  GDP growth  0.00634  -0.00309  0.0142  0.00954  0.0829*  0.0836*  (0.837)  (0.922)  (0.454)  (0.639)  (0.0811)  (0.0872)  Inflation  -0.00831  -0.00751  -0.0177  -0.0245  0.0641  0.0777  (0.461)  (0.507)  (0.451)  (0.340)  (0.361)  (0.289)  VIX  0.0102  0.0101  -0.0508***  -0.0595***  0.00716  0.00903  (0.523)  (0.532)  (3.17e-05)  (1.80e-05)  (0.600)  (0.537)  US interest rate  0.360**  0.340**  -0.0487  -0.0785  -0.0686  -0.0775  (0.0321)  (0.0447)  (0.608)  (0.475)  (0.519)  (0.482)  GDP per capita  3.192***  3.038**  1.887***  1.714**  0.511  0.408  (0.00648)  (0.0101)  (0.00218)  (0.0107)  (0.704)  (0.768)  Constant  -19.00*  -17.33  -0.511  1.362  16.67  18.00  (0.0864)  (0.119)  (0.935)  (0.842)  (0.251)  (0.228)  Observations  181  173  142  117  115  109  R-squared  0.172  0.179  0.447  0.486  0.320  0.316  Number of ifs_code  38  35  27  21  23  20  pval in parentheses  *** p<0.01, ** p<0.05, * p<0.1  NIG ratings  LIG ratings  HIG ratings   |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+--- Page 28 ---
 
 Note:
 
@@ -271,6 +335,8 @@ pval in parentheses
 
 Dependent variable is the Institutional Investor Index of country sovereign risk.
 
+--- Page 29 ---
+
 B.   Controlling for Diversification
 
 The findings are also very robust to inclusion of a diversification indicator. Table 10 shows that the results from ordered probit and panel regressions remain virtually unchanged, even though higher export diversification is found to be associated with better credit ratings in several specifications. 10
@@ -288,6 +354,8 @@ Second, we employ a four-category breakdowns, which allows us to zoom-in in the 
 10 Similarly, the results for specifications with the Institutional Investor Index and various country sub-groups are also very robust to the inclusion of diversification controls. Results are available upon request.
 
 11 The specifications that include the Institutional Investor Index and various sub-groups of countries lead to similar conclusions about the robustness of the key relationships. The results are available upon request.
+
+--- Page 30 ---
 
 Table 10. Ordered Probit and Panel Regression Results with Diversification Panel A: Ordered probit
 
@@ -309,6 +377,8 @@ Panel C: Net debt panel regressions
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 Note: Dependent variable is the credit rating variable that assumes values from 1 (worst) to 23 (best). Diversification is measures by the export diversification indicator from Ding and Hadzi-Vaskov (2017). GDP per capita is PPP-adjusted.
+
+--- Page 31 ---
 
 Table 11. Ordered Probit and Regression Results with Lagged Dependent Variable Panel A: Ordered probit
 
@@ -337,6 +407,8 @@ pval in parentheses
 
 *** p<0.01, ** p<0.05, * p<0.1
 
+--- Page 32 ---
+
 Table 12. Ordered Probit and Regression Results with Alternative Ratings Groups
 
 Panel A: Ordered probit (all A grades in LIG)
@@ -358,11 +430,15 @@ Panel C: Panel regressions (all B-BBB grades in HNIG; grades below B- in LNIG)
 | Full sample  EMDEs  Full sample  EMDEs  Full sample  AEs  EMDEs  Full sample  AEs  Gross debt  0.00168  -0.0738  -0.0211***  -0.0196***  -0.0366***  -0.0355***  -0.0370***  -0.0199***  -0.0198***  (0.978)  (0.539)  (1.10e-05)  (2.68e-05)  (6.14e-08)  (0.00752)  (5.75e-07)  (3.44e-05)  (4.43e-05)  GDP growth  -0.312  -0.178  -0.000676  0.00719  0.0557***  0.108*  0.0235  0.0899**  0.0890**  (0.228)  (0.559)  (0.969)  (0.678)  (0.00447)  (0.0945)  (0.172)  (0.0148)  (0.0205)  Inflation  -0.101  -0.199  -0.0273***  -0.0288***  -0.0187  -0.00225  0.00368  0.0644  0.0760  (0.552)  (0.401)  (0.00473)  (0.00212)  (0.398)  (0.973)  (0.855)  (0.220)  (0.213)  VIX  -0.00767  0.0241  0.00205  0.00306  -0.0162  0.00852  -0.0413***  0.00331  0.00486  (0.917)  (0.785)  (0.842)  (0.760)  (0.129)  (0.695)  (0.000106)  (0.784)  (0.705)  US interest rate  0.0248  -0.0466  0.138  0.171**  -0.0608  0.174  -0.0918  -0.144  -0.145  (0.980)  (0.965)  (0.122)  (0.0484)  (0.500)  (0.422)  (0.278)  (0.125)  (0.126)  GDP per capita  -17.40  -34.07  2.177***  2.356***  2.916***  9.850***  1.818***  0.512  0.489  (0.205)  (0.249)  (0.000925)  (0.000228)  (2.63e-08)  (3.86e-08)  (9.72e-05)  (0.617)  (0.640)  Constant  156.7  300.4  -8.047  -9.822*  -10.49**  -82.41***  0.449  17.73  18.02  (0.199)  (0.246)  (0.191)  (0.0980)  (0.0487)  (6.16e-06)  (0.924)  (0.114)  (0.114)  Observations  19  17  304  289  265  75  190  128  124  R-squared  0.784  0.848  0.260  0.285  0.389  0.651  0.417  0.307  0.303  Countries  10  9  71  65  47  14  33  28  26  HNIG ratings  LIG ratings  HIG ratings  LNIG ratings   |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
+--- Page 33 ---
+
 E.   Ordered Logit
 
 Results are also robust to the choice of ordered probit instead of ordered logit. Figure 10 presents the coefficient estimated from ordered logit rolling regressions, and Figure 11 shows the implies marginal probabilities based on 5-grade window rolling regressions that use logit instead of probit form. Similar as the ordered probit findings, Figures 10 and 11 suggests a highly non-linear pattern-public debt's negative impact is particularly severe for the middle area, and within each 5-grade window there is much higher probability of falling in the lower grades (grade 1 or 2) for credit grades in the middle than in the extremes of the credit rating distribution. The marginal effects from the logit estimation are consistent with the probit results and suggest that a debt increase of 10 percent of GDP would lower the probability of being placed in the better grades (within the 5-grade windows) by about 5 percent for the middle range of the ratings group, with the effect being smaller for the grades toward the extremes of the ratings distribution.
 
 Rolling windows of 5 credit rating grades are denoted on horizonal axis.
+
+--- Page 34 ---
 
 VI.   CONCLUDING REMARKS
 
@@ -374,6 +450,8 @@ Second, the negative relation between debt and ratings is nonlinear and depends 
 
 Third, the above nonlinear relation-coupled with the uneven distribution of AEs and EMDEs across rating grades-explains the apparent difference in the effect of debt on ratings for AEs and EMDEs even when controlling for income level and a set of macroeconomic variables. Indeed, in the middle range of rating grades (lower range of the investment grade), where we have adequate data availability for both AEs and EMDEs, we find that the negative effect of debt on ratings is very similar for the two groups of countries. Moreover, the findings that the effect is smaller for countries that have a high rating grade
 
+--- Page 35 ---
+
 (higher range of investment grades, which applies mainly to AEs), and smallest for countries that have a low rating grades (non-investment grade, which applies mainly to EMDEs), coupled with the difference in the distribution of AEs and EMDEs across the nonlinear debtcredit ratings relation, explain why the impact in AEs seems to be larger than in EMDEs.
 
 A deeper understanding of the underlying reasons leading to the identified nonlinearity is an interesting issue that is left for future research. We speculate that the revealed nonlinearity might be due to the quality of institutions and policy credibility. Most of the action happens for countries in the middle range of the rating scale (the lower half of investment grade), where current debt is an important indicator of the health of public finances. Countries with the best credit ratings, instead, are perceived as most creditworthy and enjoy the strongest institutional frameworks more broadly-hence, an increase in debt is not likely to have a strong effect on ratings, as the market expect such an increase to be offset in the future, which can explain a more limited negative impact of debt on ratings. On the other extreme, the weakest grades suffer from a multitude of deficiencies, including lack of policy credibility and adequate institutions, which could be more important for determining their ratings than debt. Some exceptions to the patterns identified in this paper are visible in the charts in the introduction, but there are good reasons for them: for example some AEs enjoy very high credit ratings despite also having high debt levels as they are considered safe heavens, while some developing economies have both low debt levels and low credit ratings as they have limited access to market.
@@ -383,6 +461,8 @@ In terms of quantifying the effects, our results from the ordered probit and log
 The results in this paper would suggest that, on the basis of ratings as of May 28 2019, emerging economies in the lower half of the investment grade range (LIG)-like Chile, Colombia, Mexico, Peru, and Russia-would experience similar effects (in terms of impact of debt on ratings) as advanced economies such as Italy, Portugal, and Spain, as they all belong to the same rating group. Countries like Bolivia, Dominican Republic, Guatemala, and Paraguay would experience an effect of debt on rating similar to Greece, all belonging to the non-investment grade (NIG) group as of May 28, 2019; and such an effect would be smaller than the one in the LIG group above.
 
 The main findings of the public debt-credit ratings relationship investigated in this study are robust to alternative dependent variables, gross versus net debt definitions, and empirical specifications.
+
+--- Page 36 ---
 
 Annex I. Dominance Analysis
 
@@ -402,11 +482,15 @@ Panel B. Complete Dominance Designations
 
 Note: Values of 1 designate dominance by the row-marked variable, and values of -1 designate dominance by the column-marked variable. Calculations based on baseline panel regression specification for the full sample with country-specific fixed effects.
 
+--- Page 37 ---
+
 Annex II. Debt-Ratings Relationship Across Regions
 
 Annex II Table 1.
 
 Note: The Table presents average ratings per region based on the observations included in our baseline specification, as well as coefficient estimates based on separate regressions as the one in column 1 of Table 4, but restricting sample to each region.
+
+--- Page 38 ---
 
 References
 
