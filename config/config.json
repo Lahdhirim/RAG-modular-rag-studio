@@ -1,0 +1,22 @@
+{
+    "parsing_config":{
+        "enable_gpu": true,
+        "ocr_config": {
+            "docling": {
+                "enabled": true,
+                "params": {"languages": ["en", "fr"]}
+            }
+        }
+    },
+    "rag_config": {
+        "chunking_config": {
+            "recursive_character": {
+                "enabled": true,
+                "params": {"chunk_size": 500, "chunk_overlap": 50}
+            }
+        },
+        "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+        "top_k": 5,
+        "similarity_threshold": 0.5
+    }
+}

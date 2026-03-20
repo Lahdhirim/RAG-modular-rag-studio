@@ -4,6 +4,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+import numpy as np
 import streamlit as st
 import torch
 from docling.datamodel.base_models import InputFormat
@@ -14,7 +15,10 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from dotenv import load_dotenv
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from src.config_loader import load_config
 from src.utils.logger_config import logger
 
 
@@ -30,9 +34,9 @@ def get_converter(ocr: bool = False):
             if ocr
             else {}
         ),
-        images_scale=1.0,
-        generate_page_images=True,
-        generate_picture_images=True,
+        images_scale=1,
+        generate_page_images=False,
+        generate_picture_images=False,
         accelerator_options=AcceleratorOptions(
             num_threads=multiprocessing.cpu_count(), device=device
         ),
@@ -77,6 +81,36 @@ def pdf_to_text(pdf_path, converter):
     return text
 
 
+def chunk_text(text):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    return splitter.split_text(text)
+
+
+@st.cache_resource
+def get_embeddings():
+    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+
+def embed_chunks(chunks):
+    model = get_embeddings()
+
+    # TODO: Add Schema (state and chunks)
+    texts = [c["text"] for c in chunks]
+
+    vectors = model.embed_documents(texts)
+
+    matrix = np.array(vectors)
+    matrix = matrix / np.linalg.norm(matrix, axis=1, keepdims=True)
+
+    return matrix
+
+
+def embed_query(query):
+    model = get_embeddings()
+    vec = np.array(model.embed_query(query))
+    return vec / np.linalg.norm(vec)
+
+
 if __name__ == "__main__":
 
     # Initialize session state and logging
@@ -97,10 +131,17 @@ if __name__ == "__main__":
         OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
         logger.info("Loaded environment variables.")
 
+        # Load configuration
+        config_path = Path("config/config.json")
+        config = load_config(config_path)
+        logger.info(f"Loaded configuration from {config_path}: {config}")
+
         # Store in session state
+        st.session_state["config"] = config
         st.session_state["COPIED_DIR"] = COPIED_DIR
         st.session_state["OUTPUT_DIR"] = OUTPUT_DIR
         st.session_state["parsing_results"] = {}
+        st.session_state["vector_store"] = {"chunks": [], "matrix": None}
         st.session_state["initialized"] = True
 
     # Initialize converters
@@ -135,7 +176,7 @@ if __name__ == "__main__":
             with tempfile.TemporaryDirectory() as tmpdir:
                 for uploaded_file in uploaded_files:
                     filename = Path(uploaded_file.name).stem
-                    file_id = f"{uploaded_file.name}_{uploaded_file.size}"
+                    file_id = f"{filename}"
 
                     # Skip if already processed in this session
                     if file_id in st.session_state["parsing_results"]:
@@ -183,6 +224,18 @@ if __name__ == "__main__":
                     st.success(f"Processed {uploaded_file.name} and \
                           saved as {output_path.name}")
 
+                    # Chunking
+                    chunks = chunk_text(text)
+                    logger.info(
+                        f"Chunked text into {len(chunks)} chunks for {uploaded_file.name}"
+                    )
+                    chunks_with_metadata = [
+                        {"text": chunk, "source": filename} for chunk in chunks
+                    ]
+                    st.session_state["vector_store"]["chunks"].extend(
+                        chunks_with_metadata
+                    )
+
                     # Update session state with parsing results
                     st.session_state["parsing_results"][file_id] = {
                         "filename": filename,
@@ -191,6 +244,44 @@ if __name__ == "__main__":
                         "is_scanned": is_scanned,
                     }
 
-            st.success("All done! You can find the processed Markdown files in\
-                      the 'outputs/ocr_outputs' directory.")
+            st.success("All done! You can now ask questions about your documents.")
             logger.info("All files processed successfully.")
+
+    # Embedding and similarity search
+    if st.session_state["vector_store"]["chunks"]:
+        all_chunks = st.session_state["vector_store"]["chunks"]
+        matrix = embed_chunks(all_chunks)
+        st.session_state["vector_store"]["matrix"] = matrix
+        logger.info(
+            f"Embedded {len(all_chunks)} chunks into vector store with shape {matrix.shape}."
+        )
+
+    if st.session_state["vector_store"]["matrix"] is not None:
+        matrix = st.session_state["vector_store"]["matrix"]
+
+        query = st.text_input("Ask your question here:")
+        if query:
+            logger.info(f"Received query: {query}")
+            query_vec = embed_query(query)
+
+            # Compute cosine similarity
+            similarities = matrix @ query_vec
+
+            # Get top 5 most relevant chunks and filter by similarity threshold
+            best_indexes = np.argsort(similarities)[-5:]
+            filtered_indexes = [
+                best_index
+                for best_index in best_indexes
+                if similarities[best_index] > 0.5
+            ]
+            logger.info(
+                f"Best matching chunk indexes: {best_indexes} with respective similarities: {similarities[best_indexes]}, filtered indexes: {filtered_indexes}"
+            )
+
+            top_chunks = [all_chunks[i] for i in filtered_indexes]
+            logger.info(f"Top chunks: {top_chunks}")
+
+            # Display results
+            st.write("### Top relevant chunks:")
+            for chunk in top_chunks:
+                st.write(f"- {chunk['text']}")
