@@ -5,3 +5,5 @@ __pycache__/
 .pre-commit-config.yaml
 .ruff_cache/
 commands.txt
+archive
+logs
