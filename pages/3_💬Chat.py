@@ -4,11 +4,13 @@ import streamlit as st
 from src.rag.embeddings import embed_chunks, embed_query
 from src.utils.logger_config import logger
 
-if not st.session_state.get("authenticated", False):
-    st.warning("Login first")
-    st.stop()
-
+# Set Streamlit page configuration
+st.set_page_config(page_title="Chat", layout="wide")
 st.title("💬 Chat")
+
+if not st.session_state.get("authenticated", False):
+    st.warning("You need to log in first to access this page.")
+    st.stop()
 
 all_chunks = st.session_state["vector_store"]["chunks"]
 if not all_chunks:

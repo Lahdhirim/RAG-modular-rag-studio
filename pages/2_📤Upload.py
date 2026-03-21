@@ -8,7 +8,7 @@ from src.rag.processing import chunk_text, generate_file_id, pdf_to_text
 from src.utils.logger_config import logger
 
 if not st.session_state.get("authenticated", False):
-    st.warning("Login first")
+    st.warning("You need to log in first to access this page.")
     st.stop()
 
 st.title("📤 Upload PDFs")

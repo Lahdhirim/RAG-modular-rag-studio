@@ -10,7 +10,9 @@ from src.rag.processing import get_converter
 from src.utils.logger_config import logger
 
 # Set Streamlit page configuration
-st.set_page_config(page_title="Simple RAG", layout="wide")
+st.set_page_config(page_title="RAG Studio", layout="wide", page_icon="assets/logo.png")
+st.title("📄 RAG Studio")
+st.sidebar.image("assets/logo.png", width=120)
 
 # Authentication state management
 if st.session_state.get("authenticated", False):
@@ -41,11 +43,11 @@ def get_embeddings():
 # Initialize session state and logging
 if "initialized" not in st.session_state:
     # Set up logging
-    logger.info("Starting the Simple RAG application...")
+    logger.info("Starting the RAG studio...")
 
     # Prepare directories
     COPIED_DIR = Path("outputs/copied_pdfs")
-    OUTPUT_DIR = Path("outputs/ocr_outputs")
+    OUTPUT_DIR = Path("outputs/parsing_outputs")
 
     COPIED_DIR.mkdir(exist_ok=True, parents=True)
     OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
@@ -63,6 +65,7 @@ if "initialized" not in st.session_state:
 
     # Store in session state
     st.session_state["config"] = config
+    st.session_state["keys"] = {"OPENAI_API_KEY": OPENAI_API_KEY}
     st.session_state["COPIED_DIR"] = COPIED_DIR
     st.session_state["OUTPUT_DIR"] = OUTPUT_DIR
     st.session_state["parsing_results"] = {}
@@ -86,5 +89,46 @@ if "embeddings_logged" not in st.session_state:
     st.session_state["embeddings_logged"] = True
 
 # Streamlit UI
-st.title("📄 Simple RAG")
-st.write("Use the sidebar to navigate")
+st.markdown("""
+Welcome to **RAG Studio** 👋  
+
+This application lets you upload PDF documents, extract and chunk their content, and ask questions using a **Retrieval-Augmented Generation (RAG)** approach.
+
+---
+
+## Getting Started
+
+### 1. 🔐 Login
+Use the sidebar to log in:
+            
+    - Username: `admin`  
+    - Password: `admin`
+
+---
+
+### 2. 📤 Upload Documents
+Go to the **Upload** page:
+            
+    - Upload your PDF files  
+    - Specify whether they are scanned or native. The app will handle text extraction accordingly  
+
+---
+
+### 3. 📚 View Documents
+Visit the **Documents** page to:
+            
+    - See parsed results  
+    - Explore generated chunks  
+
+---
+
+### 4. 💬 Chat
+Go to the **Chat** page to:
+            
+    - Ask questions about your documents  
+    - Retrieve the most relevant content  
+
+---
+
+💡 **Tip:** Upload your documents before starting a chat session.
+""")

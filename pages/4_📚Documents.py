@@ -1,12 +1,18 @@
 import streamlit as st
 
-if not st.session_state.get("authenticated", False):
-    st.warning("Login first")
-    st.stop()
-
+# Set Streamlit page configuration
+st.set_page_config(page_title="Documents", layout="wide")
 st.title("📚 Documents")
 
+if not st.session_state.get("authenticated", False):
+    st.warning("You need to log in first to access this page.")
+    st.stop()
+
 results = st.session_state.get("parsing_results", {})
+
+if not results:
+    st.warning("Upload documents first")
+    st.stop()
 
 for file_id, data in results.items():
     st.subheader(data["filename"])

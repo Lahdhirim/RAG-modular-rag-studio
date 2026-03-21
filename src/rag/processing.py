@@ -23,7 +23,7 @@ def get_converter(ocr: bool = False):
     logger.info(f"Using device: {device} | OCR mode: {ocr}")
 
     pipeline_options = PdfPipelineOptions(
-        do_table_structure=False,
+        do_table_structure=True,
         do_ocr=ocr,
         **(
             {"ocr_options": EasyOcrOptions(lang=["fr", "en"], force_full_page_ocr=True)}
