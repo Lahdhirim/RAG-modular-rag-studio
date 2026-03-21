@@ -35,7 +35,7 @@ if uploaded_files:
             f"Is {uploaded_file.name} a scanned PDF?", key=uploaded_file.name
         )
 
-    if st.button("Process PDF files"):
+    if st.button("Process PDF files", disabled=is_processing):
 
         files_data = []
         job = ProcessingJob(job_id=str(uuid.uuid4()), files=[])
@@ -85,16 +85,16 @@ if job is not None:
 
     col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
     col1.markdown("**File**")
-    col2.markdown("**Status**")
-    col3.markdown("**Progress**")
-    col4.markdown("**Scanned**")
+    col2.markdown("**Scanned**")
+    col3.markdown("**Status**")
+    col4.markdown("**Progress**")
     col5.markdown("**Error**")
     for f in job.files:
         col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
         col1.write(f"**{f.filename}**")
-        col2.write(f"Status: {f.status.value}")
-        col3.write(f"{f.progress_msg}")
-        col4.write(f"Scanned: {scanned_map.get(f.filename, 'Unknown')}")
+        col2.write(f"{scanned_map.get(f.filename, 'Unknown')}")
+        col3.write(f"Status: {f.status.value}")
+        col4.write(f"{f.progress_msg}")
         if f.error:
             col5.error(f"Error: {f.error}")
 

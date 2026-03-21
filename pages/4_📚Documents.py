@@ -15,9 +15,8 @@ if not results:
     st.stop()
 
 for file_id, data in results.items():
-    st.subheader(data["filename"])
-    st.write(f"Scanned: {data['is_scanned']}")
-    st.write(f"Path: {data['path']}")
+    st.subheader(data["metadata"]["filename"])
+    st.write(f"Scanned: {data['metadata']['is_scanned']}")
 
 st.divider()
 
