@@ -45,7 +45,7 @@ def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict)
                         else session_refs["native_converter"]
                     )
 
-                    # Convert PDF to text
+                    # Convert Document to text
                     msg = "🔍 OCR..." if is_scanned else "🔍 Extracting..."
                     job.update_file(file_id=file_id, status=Status.RUNNING, msg=msg)
                     text = pdf_to_text(str(temp_path), converter)

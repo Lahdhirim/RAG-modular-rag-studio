@@ -27,8 +27,7 @@ if "parsing_results" not in st.session_state:
 # Upload and process PDFs
 if uploaded_files:
 
-    # TODO: This is a temporary fix, scanned file detection will be implemented
-    #  in the future
+    # TODO: This is a temporary fix, scanned file detection will be implemented in the future
     # Scanned PDF checkboxes
     scanned_map = {}
     for uploaded_file in uploaded_files:
@@ -81,17 +80,23 @@ if uploaded_files:
             thread.start()
 
 # Display job status
-job = st.session_state.get("current_job")
 if job is not None:
     st.subheader("Job Status Process")
 
+    col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
+    col1.markdown("**File**")
+    col2.markdown("**Status**")
+    col3.markdown("**Progress**")
+    col4.markdown("**Scanned**")
+    col5.markdown("**Error**")
     for f in job.files:
-        col1, col2, col3, col4 = st.columns([1, 0.5, 0.5, 0.5])
+        col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
         col1.write(f"**{f.filename}**")
-        col2.write(f"Status: {f.status}")
+        col2.write(f"Status: {f.status.value}")
         col3.write(f"{f.progress_msg}")
+        col4.write(f"Scanned: {scanned_map.get(f.filename, 'Unknown')}")
         if f.error:
-            col4.error(f"Error: {f.error}")
+            col5.error(f"Error: {f.error}")
 
     if job.status == Status.DONE:
         st.success("✅ Done!")
