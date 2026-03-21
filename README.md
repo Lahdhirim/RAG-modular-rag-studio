@@ -38,6 +38,7 @@ All shared state is stored in Streamlit's `st.session_state` dictionary and is a
 | `converters_logged` | `bool` | Whether the PDF converters have been initialised and logged for this session |
 | `embedding_model` | model | Loaded sentence-transformer model instance used to embed chunks and queries |
 | `embeddings_logged` | `bool` | Whether the embedding model has been initialised and logged for this session |
+| `current_job` | `ProcessingJob` | The current background processing job, which tracks the status of uploaded files and their parsing progress |
 
 # Installation
 
