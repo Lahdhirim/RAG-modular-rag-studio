@@ -8,7 +8,7 @@ A modular RAG experimentation platform built with Streamlit. Upload documents, t
 | Initial PDF processing pipeline (Docling OCR + RecursiveCharacterTextSplitter chunking) | ✅ Done |
 |Build basic Streamlit interface with sidebar navigation | ✅ Done |
 | Multi-page Streamlit interface | ✅ Done |
-| Background document processing (job manager / async) | ⏳ Not Started |
+| Background document processing (job manager / async) | ✅ Done |
 | Vector database integration (ChromaDB) | ⏳ Not Started |
 | OpenAI-compatible LLM integration for chat | ⏳ Not Started |
 | First PyPI release (fixed OCR + fixed chunking) | ⏳ Not Started |
