@@ -31,3 +31,8 @@ def create_logger(name: str, log_file: str, propagate: bool = True) -> logging.L
 
 # Main application logger
 logger = create_logger("main_logger", "logs/app.log")
+
+# Logger for processing job
+processing_job_logger = create_logger(
+    "processing_job_logger", "logs/processing_job.log", propagate=False
+)
