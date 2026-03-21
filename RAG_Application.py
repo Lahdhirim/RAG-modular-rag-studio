@@ -69,6 +69,7 @@ if "initialized" not in st.session_state:
     st.session_state["COPIED_DIR"] = COPIED_DIR
     st.session_state["OUTPUT_DIR"] = OUTPUT_DIR
     st.session_state["parsing_results"] = {}
+    st.session_state["current_job"] = None
     st.session_state["vector_store"] = {"chunks": [], "matrix": None}
     st.session_state["initialized"] = True
 

@@ -15,7 +15,7 @@ from docling.datamodel.pipeline_options import (
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.utils.logger_config import logger
+from src.utils.logger_config import logger, processing_job_logger
 
 
 def get_converter(ocr: bool = False):
@@ -53,10 +53,10 @@ def pdf_to_text(pdf_path, converter):
     full_text = ""
     total_pages = len(doc)
 
-    logger.info(f"Total pages detected: {total_pages}")
+    processing_job_logger.info(f"Total pages detected: {total_pages}")
 
     for i in range(total_pages):
-        logger.info(f"Processing page {i+1}/{total_pages}")
+        processing_job_logger.info(f"Processing page {i+1}/{total_pages}")
 
         single_page_doc = fitz.open()
         single_page_doc.insert_pdf(doc, from_page=i, to_page=i)
@@ -77,14 +77,16 @@ def pdf_to_text(pdf_path, converter):
             full_text += f"\n\n--- Page {i+1} ---\n\n{page_text}"
 
         except Exception as e:
-            logger.error(f"Error on page {i+1}: {e}")
+            processing_job_logger.error(f"Error on page {i+1}: {e}")
 
         finally:
             if os.path.exists(temp_path):
                 try:
                     os.remove(temp_path)
                 except Exception as e:
-                    logger.warning(f"Could not delete temp file {temp_path}: {e}")
+                    processing_job_logger.warning(
+                        f"Could not delete temp file {temp_path}: {e}"
+                    )
 
         if torch.cuda.is_available():
             torch.cuda.empty_cache()

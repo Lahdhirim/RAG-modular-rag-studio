@@ -1,10 +1,12 @@
-import shutil
-import tempfile
-from pathlib import Path
+import threading
+import time
+import uuid
 
 import streamlit as st
 
-from src.rag.processing import chunk_text, generate_file_id, pdf_to_text
+from src.rag.processing import generate_file_id
+from src.services.pocessing_job import run_processing_job
+from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
 
 if not st.session_state.get("authenticated", False):
@@ -13,13 +15,19 @@ if not st.session_state.get("authenticated", False):
 
 st.title("📤 Upload PDFs")
 
-uploaded_files = st.file_uploader("Upload PDF", type="pdf", accept_multiple_files=True)
+# Get current job status
+job = st.session_state.get("current_job")
+is_processing = job is not None and job.status == Status.RUNNING
+uploaded_files = st.file_uploader(
+    "Upload PDF", type="pdf", accept_multiple_files=True, disabled=is_processing
+)
+if "parsing_results" not in st.session_state:
+    st.session_state["parsing_results"] = {}
 
 # Upload and process PDFs
 if uploaded_files:
 
-    # TODO: This is a temporary fix, scanned file detection will be implemented
-    #  in the future
+    # TODO: This is a temporary fix, scanned file detection will be implemented in the future
     # Scanned PDF checkboxes
     scanned_map = {}
     for uploaded_file in uploaded_files:
@@ -27,76 +35,90 @@ if uploaded_files:
             f"Is {uploaded_file.name} a scanned PDF?", key=uploaded_file.name
         )
 
-    if st.button("Process PDF files"):
+    if st.button("Process PDF files", disabled=is_processing):
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            for uploaded_file in uploaded_files:
-                filename = Path(uploaded_file.name).stem
-                file_id = generate_file_id(uploaded_file)
+        files_data = []
+        job = ProcessingJob(job_id=str(uuid.uuid4()), files=[])
 
-                # Skip if already processed in this session
-                if file_id in st.session_state["parsing_results"]:
-                    continue
+        for uploaded_file in uploaded_files:
+            file_id = generate_file_id(uploaded_file)
 
-                st.write(f"📄 Processing file: {filename}")
-                logger.info(f"Processing file: {filename}")
+            if file_id in st.session_state["parsing_results"]:
+                continue
 
-                temp_path = Path(tmpdir) / uploaded_file.name
-                temp_path.write_bytes(uploaded_file.getbuffer())
-
-                # Copy PDF to copied_pdfs directory
-                copied_path = st.session_state["COPIED_DIR"] / uploaded_file.name
-                shutil.copy(temp_path, copied_path)
-                logger.info(f"Copied {uploaded_file.name} to {copied_path}")
-
-                # Check whether the file is a native PDF or scanned PDF
-                is_scanned = scanned_map[uploaded_file.name]
-                logger.info(f"Is {uploaded_file.name} a scanned PDF? {is_scanned}")
-
-                converter = (
-                    st.session_state["ocr_converter"]
-                    if is_scanned
-                    else st.session_state["native_converter"]
-                )
-
-                if not is_scanned:
-                    # Native PDF
-                    with st.spinner(f"Extracting text from {uploaded_file.name}..."):
-                        text = pdf_to_text(pdf_path=str(temp_path), converter=converter)
-                        logger.info(
-                            f"Text extraction completed for {uploaded_file.name}"
-                        )
-                else:
-                    # OCR
-                    with st.spinner(f"OCR on {uploaded_file.name}..."):
-                        text = pdf_to_text(pdf_path=str(temp_path), converter=converter)
-                        logger.info(f"OCR completed for {uploaded_file.name}")
-
-                # Save in Markdown format
-                output_path = st.session_state["OUTPUT_DIR"] / f"{filename}.md"
-                with open(output_path, "w", encoding="utf-8") as f:
-                    f.write(text)
-                logger.info(f"Saved Markdown file: {output_path}")
-                st.success(f"Processed {uploaded_file.name} and \
-                      saved as {output_path.name}")
-
-                # Chunking
-                chunks = chunk_text(text)
-                logger.info(
-                    f"Chunked text into {len(chunks)} chunks for {uploaded_file.name}"
-                )
-                chunks_with_metadata = [
-                    {"text": chunk, "source": filename} for chunk in chunks
-                ]
-                st.session_state["vector_store"]["chunks"].extend(chunks_with_metadata)
-
-                # Update session state with parsing results
-                st.session_state["parsing_results"][file_id] = {
-                    "filename": filename,
-                    "text": text,
-                    "path": str(output_path),
-                    "is_scanned": is_scanned,
+            files_data.append(
+                {
+                    "file_id": file_id,
+                    "filename": uploaded_file.name,
+                    "bytes": uploaded_file.getbuffer().tobytes(),
+                    "is_scanned": scanned_map[uploaded_file.name],
                 }
+            )
 
-        st.success("All done! You can now ask questions about your documents.")
-        logger.info("All files processed successfully.")
+            job.files.append(FileJob(file_id=file_id, filename=uploaded_file.name))
+
+        # Run processing in a separate thread
+        if files_data:
+            session_refs = {
+                "COPIED_DIR": st.session_state["COPIED_DIR"],
+                "OUTPUT_DIR": st.session_state["OUTPUT_DIR"],
+                "ocr_converter": st.session_state["ocr_converter"],
+                "native_converter": st.session_state["native_converter"],
+            }
+
+            logger.info(
+                f"Initiating processing job {job.job_id} for {len(files_data)} files"
+            )
+            thread = threading.Thread(
+                target=run_processing_job,
+                args=(job, files_data, session_refs),
+                daemon=True,
+            )
+
+            st.session_state["current_job"] = job
+            logger.info(f"Starting background thread for job {job.job_id}")
+            thread.start()
+
+# Display job status
+if job is not None:
+    st.subheader("Job Status Process")
+
+    col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
+    col1.markdown("**File**")
+    col2.markdown("**Scanned**")
+    col3.markdown("**Status**")
+    col4.markdown("**Progress**")
+    col5.markdown("**Error**")
+    for f in job.files:
+        col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
+        col1.write(f"**{f.filename}**")
+        col2.write(f"{scanned_map.get(f.filename, 'Unknown')}")
+        col3.write(f"Status: {f.status.value}")
+        col4.write(f"{f.progress_msg}")
+        if f.error:
+            col5.error(f"Error: {f.error}")
+
+    if job.status == Status.DONE:
+        st.success("✅ Done!")
+        logger.info(
+            f"Processing job {job.job_id} completed successfully with {len(job.files)} files processed."
+        )
+
+        # Inject results
+        st.session_state["parsing_results"].update(job.parsing_results)
+        st.session_state["vector_store"]["chunks"].extend(job.chunks)
+        logger.info(
+            f"Updated session state with parsing results and chunks from job {job.job_id}. Total chunks in vector store: {len(st.session_state['vector_store']['chunks'])}"
+        )
+
+        # Clear current job from session state
+        st.session_state["current_job"] = None
+
+    elif job.status == Status.ERROR:
+        st.error(f"Error during processing: {job.error}")
+        logger.error(f"Processing job {job.job_id} encountered an error: {job.error}")
+
+    else:
+        # Job is still running, refresh every 2 seconds
+        time.sleep(2)
+        st.rerun()
