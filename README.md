@@ -9,7 +9,7 @@ A modular RAG experimentation platform built with Streamlit. Upload documents, t
 |Build basic Streamlit interface with sidebar navigation | ✅ Done |
 | Multi-page Streamlit interface | ✅ Done |
 | Background document processing (job manager / async) | ✅ Done |
-| Vector database integration (ChromaDB) | ⏳ Not Started |
+| Vector database integration (ChromaDB) | 🚧 In Progress |
 | OpenAI-compatible LLM integration for chat | ⏳ Not Started |
 | First PyPI release (fixed OCR + fixed chunking) | ⏳ Not Started |
 | Support multiple OCR engines | ⏳ Not Started |
