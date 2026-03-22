@@ -59,6 +59,7 @@ if "initialized" not in st.session_state:
     logger.info("Loaded environment variables.")
 
     # Load configuration
+    # TODO: Get selected choices for config
     config_path = Path("config/config.json")
     config = load_config(config_path)
     logger.info(f"Loaded configuration from {config_path}: {config}")
