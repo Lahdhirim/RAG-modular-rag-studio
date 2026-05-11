@@ -46,6 +46,7 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
             f"Best matching chunk indexes: {best_indexes} with respective similarities: {similarities[best_indexes]}, filtered indexes: {filtered_indexes}"
         )
 
+        # TODO: Initialize retrieval service and get its configuration
         top_chunks = [all_chunks[i] for i in filtered_indexes]
         logger.info(f"Top chunks: {top_chunks}")
 
