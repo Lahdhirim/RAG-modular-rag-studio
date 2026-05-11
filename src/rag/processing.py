@@ -76,6 +76,8 @@ def pdf_to_text(pdf_path, converter):
 
     processing_job_logger.info(f"Total pages detected: {total_pages}")
 
+    successfully_processed_pages, failed_pages = 0, 0
+
     for i in range(total_pages):
         processing_job_logger.info(f"Processing page {i+1}/{total_pages}")
 
@@ -96,9 +98,11 @@ def pdf_to_text(pdf_path, converter):
             page_text = docling_doc.export_to_text()
 
             full_text += f"\n\n--- Page {i+1} ---\n\n{page_text}"
+            successfully_processed_pages += 1
 
         except Exception as e:
             processing_job_logger.error(f"Error on page {i+1}: {e}")
+            failed_pages += 1
 
         finally:
             if os.path.exists(temp_path):
@@ -113,7 +117,10 @@ def pdf_to_text(pdf_path, converter):
             torch.cuda.empty_cache()
 
     doc.close()
-    return full_text
+    processing_job_logger.info(
+        f"Processed pages: {successfully_processed_pages}, Failed pages: {failed_pages}"
+    )
+    return full_text, successfully_processed_pages, failed_pages
 
 
 def generate_file_id(uploaded_file):

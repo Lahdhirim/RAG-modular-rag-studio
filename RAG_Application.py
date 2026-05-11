@@ -68,7 +68,7 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     st.session_state[SessionStateSchema.KEYS] = {"OPENAI_API_KEY": OPENAI_API_KEY}
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
     st.session_state[SessionStateSchema.OUTPUT_DIR] = OUTPUT_DIR
-    st.session_state[SessionStateSchema.PARSINGRESULTS] = {}
+    st.session_state[SessionStateSchema.PARSING_RESULTS] = {}
     st.session_state[SessionStateSchema.CURRENT_JOB] = None
     st.session_state[SessionStateSchema.VECTOR_STORE] = {"chunks": [], "matrix": None}
     st.session_state[SessionStateSchema.INITIALIZED] = True
@@ -80,7 +80,7 @@ native_converter = get_native_converter(
 ocr_converter = get_ocr_converter(
     parsing_config=st.session_state[SessionStateSchema.CONFIG].parsing_config
 )
-if "converters_logged" not in st.session_state:
+if SessionStateSchema.CONVERTERS_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.NATIVE_CONVERTER] = native_converter
     st.session_state[SessionStateSchema.OCR_CONVERTER] = ocr_converter
     logger.info("Initialized document converters.")

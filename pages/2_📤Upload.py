@@ -8,27 +8,27 @@ from src.rag.processing import generate_file_id
 from src.services.pocessing_job import run_processing_job
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
-from src.utils.schema import SessionStateSchema
+from src.utils.schema import InputFileSchema, SessionStateSchema
 
-if not st.session_state.get("authenticated", False):
+if not st.session_state.get(SessionStateSchema.AUTHENTICATED, False):
     st.warning("You need to log in first to access this page.")
     st.stop()
 
 st.title("📤 Upload PDFs")
 
 # Get current job status
-job = st.session_state.get("current_job")
+job = st.session_state.get(SessionStateSchema.CURRENT_JOB, None)
 is_processing = job is not None and job.status == Status.RUNNING
 uploaded_files = st.file_uploader(
     "Upload PDF", type="pdf", accept_multiple_files=True, disabled=is_processing
 )
-if "parsing_results" not in st.session_state:
-    st.session_state["parsing_results"] = {}
+if SessionStateSchema.PARSING_RESULTS not in st.session_state:
+    st.session_state[SessionStateSchema.PARSING_RESULTS] = {}
 
 # Initialize scanned file map
-if "scanned_map" not in st.session_state:
-    st.session_state["scanned_map"] = {}
-scanned_map = st.session_state["scanned_map"]
+if SessionStateSchema.SCANNED_MAP not in st.session_state:
+    st.session_state[SessionStateSchema.SCANNED_MAP] = {}
+scanned_map = st.session_state[SessionStateSchema.SCANNED_MAP]
 
 # Upload and process PDFs
 if uploaded_files:
@@ -48,15 +48,15 @@ if uploaded_files:
         for uploaded_file in uploaded_files:
             file_id = generate_file_id(uploaded_file)
 
-            if file_id in st.session_state["parsing_results"]:
+            if file_id in st.session_state[SessionStateSchema.PARSING_RESULTS]:
                 continue
 
             files_data.append(
                 {
-                    "file_id": file_id,
-                    "filename": uploaded_file.name,
-                    "bytes": uploaded_file.getbuffer().tobytes(),
-                    "is_scanned": scanned_map[uploaded_file.name],
+                    InputFileSchema.FILE_ID: file_id,
+                    InputFileSchema.FILENAME: uploaded_file.name,
+                    InputFileSchema.BYTES: uploaded_file.getbuffer().tobytes(),
+                    InputFileSchema.SCANNED: scanned_map[uploaded_file.name],
                 }
             )
 
@@ -65,10 +65,18 @@ if uploaded_files:
         # Run processing in a separate thread
         if files_data:
             session_refs = {
-                "COPIED_DIR": st.session_state[SessionStateSchema.COPIED_DIR],
-                "OUTPUT_DIR": st.session_state[SessionStateSchema.OUTPUT_DIR],
-                "ocr_converter": st.session_state["ocr_converter"],
-                "native_converter": st.session_state["native_converter"],
+                SessionStateSchema.COPIED_DIR: st.session_state[
+                    SessionStateSchema.COPIED_DIR
+                ],
+                SessionStateSchema.OUTPUT_DIR: st.session_state[
+                    SessionStateSchema.OUTPUT_DIR
+                ],
+                SessionStateSchema.OCR_CONVERTER: st.session_state[
+                    SessionStateSchema.OCR_CONVERTER
+                ],
+                SessionStateSchema.NATIVE_CONVERTER: st.session_state[
+                    SessionStateSchema.NATIVE_CONVERTER
+                ],
             }
 
             logger.info(
@@ -80,7 +88,7 @@ if uploaded_files:
                 daemon=True,
             )
 
-            st.session_state["current_job"] = job
+            st.session_state[SessionStateSchema.CURRENT_JOB] = job
             logger.info(f"Starting background thread for job {job.job_id}")
             thread.start()
 
@@ -111,17 +119,17 @@ if job is not None:
         )
 
         # Inject results
-        st.session_state["parsing_results"].update(job.parsing_results)
-        st.session_state["vector_store"]["chunks"].extend(job.chunks)
+        st.session_state[SessionStateSchema.PARSING_RESULTS].update(job.parsing_results)
+        st.session_state[SessionStateSchema.VECTOR_STORE]["chunks"].extend(job.chunks)
         logger.info(
-            f"Updated session state with parsing results and chunks from job {job.job_id}. Total chunks in vector store: {len(st.session_state['vector_store']['chunks'])}"
+            f"Updated session state with parsing results and chunks from job {job.job_id}. Total chunks in vector store: {len(st.session_state[SessionStateSchema.VECTOR_STORE]['chunks'])}"
         )
 
         # Clear current job from session state
-        st.session_state["current_job"] = None
+        st.session_state[SessionStateSchema.CURRENT_JOB] = None
 
         # Clear scanned map for next uploads
-        st.session_state["scanned_map"] = {}
+        st.session_state[SessionStateSchema.SCANNED_MAP] = {}
 
     elif job.status == Status.ERROR:
         st.error(f"Error during processing: {job.error}")

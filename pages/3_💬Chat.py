@@ -3,30 +3,31 @@ import streamlit as st
 
 from src.rag.embeddings import embed_chunks, embed_query
 from src.utils.logger_config import logger
+from src.utils.schema import ChunksSchema, SessionStateSchema
 
 # Set Streamlit page configuration
 st.set_page_config(page_title="Chat", layout="wide")
 st.title("💬 Chat")
 
-if not st.session_state.get("authenticated", False):
+if not st.session_state.get(SessionStateSchema.AUTHENTICATED, False):
     st.warning("You need to log in first to access this page.")
     st.stop()
 
-all_chunks = st.session_state["vector_store"]["chunks"]
+all_chunks = st.session_state[SessionStateSchema.VECTOR_STORE]["chunks"]
 if not all_chunks:
     st.warning("Upload documents first")
     st.stop()
 
-model = st.session_state["embedding_model"]
+model = st.session_state[SessionStateSchema.EMBEDDING_MODEL]
 
 # Embeddings
-if st.session_state["vector_store"]["matrix"] is None:
+if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is None:
     matrix = embed_chunks(all_chunks, model)
-    st.session_state["vector_store"]["matrix"] = matrix
+    st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] = matrix
     logger.info("Computed embeddings for all chunks and stored in session state.")
 
-if st.session_state["vector_store"]["matrix"] is not None:
-    matrix = st.session_state["vector_store"]["matrix"]
+if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
+    matrix = st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"]
 
     query = st.text_input("Ask your question here:")
     if query:
@@ -51,4 +52,4 @@ if st.session_state["vector_store"]["matrix"] is not None:
         # Display results
         st.write("### Top relevant chunks:")
         for chunk in top_chunks:
-            st.write(f"- {chunk['text']}")
+            st.write(f"- {chunk[ChunksSchema.TEXT]}")

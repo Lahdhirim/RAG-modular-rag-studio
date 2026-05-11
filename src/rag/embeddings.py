@@ -2,6 +2,7 @@ import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from src.utils.logger_config import logger
+from src.utils.schema import ChunksSchema
 
 
 def load_embeddings_model(model_name: str):
@@ -14,8 +15,7 @@ def load_embeddings_model(model_name: str):
 
 def embed_chunks(chunks, model):
 
-    # TODO: Add Schema (state and chunks)
-    texts = [c["text"] for c in chunks]
+    texts = [c[ChunksSchema.TEXT] for c in chunks]
 
     vectors = model.embed_documents(texts)
 
