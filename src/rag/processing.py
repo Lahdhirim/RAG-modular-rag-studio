@@ -15,36 +15,58 @@ from docling.datamodel.pipeline_options import (
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from src.config_loader import ParsingConfig, RAGConfig
 from src.utils.logger_config import logger, processing_job_logger
+from src.utils.schema import ChunksSchema, ParsingSchema
 
 
-def get_converter(ocr: bool = False):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+def get_converter(parsing_config: ParsingConfig, ocr: bool = False):
+    device = (
+        "cuda" if (torch.cuda.is_available() and parsing_config.enable_gpu) else "cpu"
+    )
     logger.info(f"Using device: {device} | OCR mode: {ocr}")
 
-    pipeline_options = PdfPipelineOptions(
-        do_table_structure=True,
-        do_ocr=ocr,
-        **(
-            {"ocr_options": EasyOcrOptions(lang=["fr", "en"], force_full_page_ocr=True)}
-            if ocr
-            else {}
-        ),
-        images_scale=1,
-        generate_page_images=True,
-        generate_picture_images=True,
-        accelerator_options=AcceleratorOptions(
-            num_threads=multiprocessing.cpu_count(), device=device
-        ),
-    )
+    parser_name, parser_cfg = parsing_config.get_selected_parser()
+    logger.info(f"Selected parsing method: {parser_name} with config: {parser_cfg}")
 
-    converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-        }
-    )
+    if parser_name == ParsingSchema.DOCLING:
+        selected_languages = (
+            parser_cfg.params.get("languages", ["en", "fr"])
+            if parser_cfg.params
+            else ["en", "fr"]
+        )
 
-    return converter
+        pipeline_options = PdfPipelineOptions(
+            do_table_structure=True,
+            do_ocr=ocr,
+            **(
+                {
+                    "ocr_options": EasyOcrOptions(
+                        lang=selected_languages, force_full_page_ocr=True
+                    )
+                }
+                if ocr
+                else {}
+            ),
+            images_scale=1,
+            generate_page_images=True,
+            generate_picture_images=True,
+            accelerator_options=AcceleratorOptions(
+                num_threads=multiprocessing.cpu_count(), device=device
+            ),
+        )
+
+        converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
+        )
+
+        return converter
+
+    else:
+        logger.error(f"Unsupported parsing method: {parser_name}")
+        raise ValueError(f"Unsupported parsing method: {parser_name}")
 
 
 def pdf_to_text(pdf_path, converter):
@@ -54,6 +76,8 @@ def pdf_to_text(pdf_path, converter):
     total_pages = len(doc)
 
     processing_job_logger.info(f"Total pages detected: {total_pages}")
+
+    successfully_processed_pages, failed_pages = 0, 0
 
     for i in range(total_pages):
         processing_job_logger.info(f"Processing page {i+1}/{total_pages}")
@@ -75,9 +99,11 @@ def pdf_to_text(pdf_path, converter):
             page_text = docling_doc.export_to_text()
 
             full_text += f"\n\n--- Page {i+1} ---\n\n{page_text}"
+            successfully_processed_pages += 1
 
         except Exception as e:
             processing_job_logger.error(f"Error on page {i+1}: {e}")
+            failed_pages += 1
 
         finally:
             if os.path.exists(temp_path):
@@ -92,7 +118,10 @@ def pdf_to_text(pdf_path, converter):
             torch.cuda.empty_cache()
 
     doc.close()
-    return full_text
+    processing_job_logger.info(
+        f"Processed pages: {successfully_processed_pages}, Failed pages: {failed_pages}"
+    )
+    return full_text, successfully_processed_pages, failed_pages
 
 
 def generate_file_id(uploaded_file):
@@ -100,6 +129,16 @@ def generate_file_id(uploaded_file):
     return hashlib.sha256(file_bytes).hexdigest()
 
 
-def chunk_text(text):
-    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-    return splitter.split_text(text)
+def get_chunker(chunking_config: RAGConfig):
+    chunker_name, chunker_cfg = chunking_config.get_selected_chunker()
+    logger.info(f"Selected chunking method: {chunker_name} with config: {chunker_cfg}")
+
+    if chunker_name == ChunksSchema.RECURSIVE_CHARACTER:
+        return RecursiveCharacterTextSplitter(
+            chunk_size=chunker_cfg.params.get("chunk_size", 500),
+            chunk_overlap=chunker_cfg.params.get("chunk_overlap", 50),
+        )
+
+    else:
+        logger.error(f"Unsupported chunking method: {chunker_name}")
+        raise ValueError(f"Unsupported chunking method: {chunker_name}")

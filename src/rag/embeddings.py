@@ -1,15 +1,21 @@
 import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
+from src.utils.logger_config import logger
+from src.utils.schema import ChunksSchema
 
-def load_embeddings_model():
-    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+def load_embeddings_model(model_name: str):
+    try:
+        return HuggingFaceEmbeddings(model_name=model_name)
+    except Exception as e:
+        logger.error(f"Error loading embeddings model: {e}")
+        raise RuntimeError(f"Failed to load embeddings model: {model_name}") from e
 
 
 def embed_chunks(chunks, model):
 
-    # TODO: Add Schema (state and chunks)
-    texts = [c["text"] for c in chunks]
+    texts = [c[ChunksSchema.TEXT] for c in chunks]
 
     vectors = model.embed_documents(texts)
 
