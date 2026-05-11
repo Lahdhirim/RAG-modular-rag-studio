@@ -1,7 +1,11 @@
-{
+{   
+    "directory_config": {
+        "copied_pdfs_dir": "outputs/copied_pdfs",
+        "parsing_outputs_dir": "outputs/parsing_outputs"
+    },
     "parsing_config":{
         "enable_gpu": true,
-        "ocr_config": {
+        "method_config": {
             "docling": {
                 "enabled": true,
                 "params": {"languages": ["en", "fr"]}

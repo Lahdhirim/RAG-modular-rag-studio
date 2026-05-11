@@ -1,9 +1,15 @@
 import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
+from src.utils.logger_config import logger
 
-def load_embeddings_model():
-    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+def load_embeddings_model(model_name: str):
+    try:
+        return HuggingFaceEmbeddings(model_name=model_name)
+    except Exception as e:
+        logger.error(f"Error loading embeddings model: {e}")
+        raise RuntimeError(f"Failed to load embeddings model: {model_name}") from e
 
 
 def embed_chunks(chunks, model):

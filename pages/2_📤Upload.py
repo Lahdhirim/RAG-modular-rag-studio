@@ -8,6 +8,7 @@ from src.rag.processing import generate_file_id
 from src.services.pocessing_job import run_processing_job
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
+from src.utils.schema import SessionStateSchema
 
 if not st.session_state.get("authenticated", False):
     st.warning("You need to log in first to access this page.")
@@ -24,12 +25,16 @@ uploaded_files = st.file_uploader(
 if "parsing_results" not in st.session_state:
     st.session_state["parsing_results"] = {}
 
+# Initialize scanned file map
+if "scanned_map" not in st.session_state:
+    st.session_state["scanned_map"] = {}
+scanned_map = st.session_state["scanned_map"]
+
 # Upload and process PDFs
 if uploaded_files:
 
     # TODO: This is a temporary fix, scanned file detection will be implemented in the future
     # Scanned PDF checkboxes
-    scanned_map = {}
     for uploaded_file in uploaded_files:
         scanned_map[uploaded_file.name] = st.checkbox(
             f"Is {uploaded_file.name} a scanned PDF?", key=uploaded_file.name
@@ -60,8 +65,8 @@ if uploaded_files:
         # Run processing in a separate thread
         if files_data:
             session_refs = {
-                "COPIED_DIR": st.session_state["COPIED_DIR"],
-                "OUTPUT_DIR": st.session_state["OUTPUT_DIR"],
+                "COPIED_DIR": st.session_state[SessionStateSchema.COPIED_DIR],
+                "OUTPUT_DIR": st.session_state[SessionStateSchema.OUTPUT_DIR],
                 "ocr_converter": st.session_state["ocr_converter"],
                 "native_converter": st.session_state["native_converter"],
             }
@@ -81,6 +86,7 @@ if uploaded_files:
 
 # Display job status
 if job is not None:
+
     st.subheader("Job Status Process")
 
     col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
@@ -113,6 +119,9 @@ if job is not None:
 
         # Clear current job from session state
         st.session_state["current_job"] = None
+
+        # Clear scanned map for next uploads
+        st.session_state["scanned_map"] = {}
 
     elif job.status == Status.ERROR:
         st.error(f"Error during processing: {job.error}")

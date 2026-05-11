@@ -15,36 +15,57 @@ from docling.datamodel.pipeline_options import (
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from src.config_loader import ParsingConfig
 from src.utils.logger_config import logger, processing_job_logger
+from src.utils.schema import ParsingSchema
 
 
-def get_converter(ocr: bool = False):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+def get_converter(parsing_config: ParsingConfig, ocr: bool = False):
+    device = (
+        "cuda" if (torch.cuda.is_available() and parsing_config.enable_gpu) else "cpu"
+    )
     logger.info(f"Using device: {device} | OCR mode: {ocr}")
 
-    pipeline_options = PdfPipelineOptions(
-        do_table_structure=True,
-        do_ocr=ocr,
-        **(
-            {"ocr_options": EasyOcrOptions(lang=["fr", "en"], force_full_page_ocr=True)}
-            if ocr
-            else {}
-        ),
-        images_scale=1,
-        generate_page_images=True,
-        generate_picture_images=True,
-        accelerator_options=AcceleratorOptions(
-            num_threads=multiprocessing.cpu_count(), device=device
-        ),
-    )
+    parser_name, parser_cfg = parsing_config.get_selected_parser()
+    logger.info(f"Selected parsing method: {parser_name} with config: {parser_cfg}")
 
-    converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-        }
-    )
+    if parser_name == ParsingSchema.DOCLING:
+        selected_languages = (
+            parser_cfg.params.get("languages", ["en", "fr"])
+            if parser_cfg.params
+            else ["en", "fr"]
+        )
 
-    return converter
+        pipeline_options = PdfPipelineOptions(
+            do_table_structure=True,
+            do_ocr=ocr,
+            **(
+                {
+                    "ocr_options": EasyOcrOptions(
+                        lang=selected_languages, force_full_page_ocr=True
+                    )
+                }
+                if ocr
+                else {}
+            ),
+            images_scale=1,
+            generate_page_images=True,
+            generate_picture_images=True,
+            accelerator_options=AcceleratorOptions(
+                num_threads=multiprocessing.cpu_count(), device=device
+            ),
+        )
+
+        converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
+        )
+
+        return converter
+
+    else:
+        raise ValueError(f"Unsupported parsing method: {parser_name}")
 
 
 def pdf_to_text(pdf_path, converter):

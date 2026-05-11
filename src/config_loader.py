@@ -1,13 +1,15 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
 
 from pydantic import BaseModel, Field, model_validator
 
+AllowedParserNames = Literal["docling"]
 
-class OCRMethodConfig(BaseModel):
-    enabled: bool = Field(..., description="Whether the OCR method is enabled")
+
+class ParsingMethodConfig(BaseModel):
+    enabled: bool = Field(..., description="Whether the parsing method is enabled")
     params: Optional[Dict[str, Any]] = Field(
-        default=None, description="Parameters specific to the selected OCR method"
+        default=None, description="Parameters specific to the selected parsing method"
     )
 
 
@@ -16,21 +18,21 @@ class ParsingConfig(BaseModel):
         default=False, description="Enable GPU acceleration"
     )
 
-    ocr_config: Dict[str, OCRMethodConfig] = Field(
-        ..., description="Available OCR configurations"
+    method_config: Dict[AllowedParserNames, ParsingMethodConfig] = Field(
+        ..., description="Parsing method choice and configuration"
     )
 
     @model_validator(mode="after")
-    def check_single_ocr_enabled(self):
-        enabled = [name for name, cfg in self.ocr_config.items() if cfg.enabled]
+    def check_single_parser_enabled(self):
+        enabled = [name for name, cfg in self.method_config.items() if cfg.enabled]
 
         if len(enabled) != 1:
-            raise ValueError(f"Exactly ONE OCR config must be enabled, got: {enabled}")
+            raise ValueError(f"Exactly ONE Parser must be enabled, got: {enabled}")
 
         return self
 
-    def get_selected_ocr(self):
-        for name, cfg in self.ocr_config.items():
+    def get_selected_parser(self):
+        for name, cfg in self.method_config.items():
             if cfg.enabled:
                 return name, cfg
 
@@ -69,9 +71,23 @@ class RAGConfig(BaseModel):
                 return name, cfg
 
 
+class DirectoryConfig(BaseModel):
+    copied_pdfs_dir: Optional[str] = Field(
+        default="outputs/copied_pdfs", description="Directory for copied PDFs"
+    )
+    parsing_outputs_dir: Optional[str] = Field(
+        default="outputs/parsing_outputs", description="Directory for parsing outputs"
+    )
+
+
 class StudioConfig(BaseModel):
-    parsing_config: ParsingConfig
-    rag_config: RAGConfig
+    directory_config: DirectoryConfig = Field(
+        ..., description="Directory paths configuration"
+    )
+    parsing_config: ParsingConfig = Field(
+        ..., description="Document parsing configuration"
+    )
+    rag_config: RAGConfig = Field(..., description="RAG configuration")
 
 
 def load_config(path: str) -> StudioConfig:
