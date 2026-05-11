@@ -18,6 +18,8 @@ class SessionStateSchema:
     EMBEDDINGS_LOGGED = "embeddings_logged"
     EMBEDDING_MODEL = "embedding_model"
     SCANNED_MAP = "scanned_map"
+    CHUNKER_LOGGED = "chunker_logged"
+    CHUNKER_METHOD = "chunker_method"
 
 
 class InputFileSchema:
@@ -39,3 +41,5 @@ class ChunksSchema:
     SOURCE = "source"
     SOURCE_ID = "source_id"
     IS_SCANNED = "is_scanned"
+
+    RECURSIVE_CHARACTER = "recursive_character"

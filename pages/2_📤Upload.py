@@ -5,7 +5,7 @@ import uuid
 import streamlit as st
 
 from src.rag.processing import generate_file_id
-from src.services.pocessing_job import run_processing_job
+from src.services.processing_job import run_processing_job
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
 from src.utils.schema import InputFileSchema, SessionStateSchema
@@ -76,6 +76,9 @@ if uploaded_files:
                 ],
                 SessionStateSchema.NATIVE_CONVERTER: st.session_state[
                     SessionStateSchema.NATIVE_CONVERTER
+                ],
+                SessionStateSchema.CHUNKER_METHOD: st.session_state[
+                    SessionStateSchema.CHUNKER_METHOD
                 ],
             }
 

@@ -2,7 +2,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from src.rag.processing import chunk_text, pdf_to_text
+from src.rag.processing import pdf_to_text
 from src.utils.background_jobs import ProcessingJob, Status
 from src.utils.logger_config import processing_job_logger as logger
 from src.utils.schema import (
@@ -13,6 +13,7 @@ from src.utils.schema import (
 )
 
 
+# TODO: Refactor codebase to chunking, embedding, retieval, llms, parsing and vector store with their respective configs
 def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
 
     logger.info(f"Starting processing job {job.job_id} with {len(files_data)} files")
@@ -77,10 +78,11 @@ def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict)
                         logger.info(f"Saved Markdown file: {output_path}")
 
                         # Chunking
+                        chunker_method = session_refs[SessionStateSchema.CHUNKER_METHOD]
                         job.update_file(
                             file_id=file_id, status=Status.RUNNING, msg="📦 Chunking..."
                         )
-                        chunks = chunk_text(text)
+                        chunks = chunker_method.split_text(text)
                         logger.info(
                             f"Chunked text into {len(chunks)} chunks for {filename}"
                         )

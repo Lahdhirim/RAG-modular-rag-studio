@@ -4,6 +4,7 @@ from typing import Any, Dict, Literal, Optional
 from pydantic import BaseModel, Field, model_validator
 
 AllowedParserNames = Literal["docling"]
+AllowedChunkerNames = Literal["recursive_character"]
 
 
 class ParsingMethodConfig(BaseModel):
@@ -44,13 +45,14 @@ class ChunkingMethodConfig(BaseModel):
     )
 
 
+# TODO: Separate Chunking and Embedding configs
 class RAGConfig(BaseModel):
-    chunking_config: Dict[str, ChunkingMethodConfig] = Field(
+    chunking_config: Dict[AllowedChunkerNames, ChunkingMethodConfig] = Field(
         ..., description="Chunking configuration"
     )
     embedding_model: str = Field(..., description="Embedding model name")
-    top_k: int = Field(default=5, description="Number of retrieved chunks")
-    similarity_threshold: float = Field(
+    top_k: Optional[int] = Field(default=5, description="Number of retrieved chunks")
+    similarity_threshold: Optional[float] = Field(
         default=0.7, description="Minimum similarity threshold"
     )
 

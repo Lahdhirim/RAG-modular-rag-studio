@@ -15,9 +15,9 @@ from docling.datamodel.pipeline_options import (
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.config_loader import ParsingConfig
+from src.config_loader import ParsingConfig, RAGConfig
 from src.utils.logger_config import logger, processing_job_logger
-from src.utils.schema import ParsingSchema
+from src.utils.schema import ChunksSchema, ParsingSchema
 
 
 def get_converter(parsing_config: ParsingConfig, ocr: bool = False):
@@ -65,6 +65,7 @@ def get_converter(parsing_config: ParsingConfig, ocr: bool = False):
         return converter
 
     else:
+        logger.error(f"Unsupported parsing method: {parser_name}")
         raise ValueError(f"Unsupported parsing method: {parser_name}")
 
 
@@ -128,6 +129,16 @@ def generate_file_id(uploaded_file):
     return hashlib.sha256(file_bytes).hexdigest()
 
 
-def chunk_text(text):
-    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-    return splitter.split_text(text)
+def get_chunker(chunking_config: RAGConfig):
+    chunker_name, chunker_cfg = chunking_config.get_selected_chunker()
+    logger.info(f"Selected chunking method: {chunker_name} with config: {chunker_cfg}")
+
+    if chunker_name == ChunksSchema.RECURSIVE_CHARACTER:
+        return RecursiveCharacterTextSplitter(
+            chunk_size=chunker_cfg.params.get("chunk_size", 500),
+            chunk_overlap=chunker_cfg.params.get("chunk_overlap", 50),
+        )
+
+    else:
+        logger.error(f"Unsupported chunking method: {chunker_name}")
+        raise ValueError(f"Unsupported chunking method: {chunker_name}")

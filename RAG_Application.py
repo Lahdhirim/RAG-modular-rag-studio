@@ -4,9 +4,9 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.config_loader import ParsingConfig, load_config
+from src.config_loader import ParsingConfig, RAGConfig, load_config
 from src.rag.embeddings import load_embeddings_model
-from src.rag.processing import get_converter
+from src.rag.processing import get_chunker, get_converter
 from src.utils.logger_config import logger
 from src.utils.schema import SessionStateSchema
 
@@ -34,6 +34,11 @@ def get_native_converter(parsing_config: ParsingConfig):
 @st.cache_resource
 def get_ocr_converter(parsing_config: ParsingConfig):
     return get_converter(ocr=True, parsing_config=parsing_config)
+
+
+@st.cache_resource
+def get_chunker_method(chunking_config: RAGConfig):
+    return get_chunker(chunking_config=chunking_config)
 
 
 @st.cache_resource
@@ -85,6 +90,15 @@ if SessionStateSchema.CONVERTERS_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.OCR_CONVERTER] = ocr_converter
     logger.info("Initialized document converters.")
     st.session_state[SessionStateSchema.CONVERTERS_LOGGED] = True
+
+# Initialize chunker
+chunker_method = get_chunker_method(
+    chunking_config=st.session_state[SessionStateSchema.CONFIG].rag_config
+)
+if SessionStateSchema.CHUNKER_LOGGED not in st.session_state:
+    st.session_state[SessionStateSchema.CHUNKER_METHOD] = chunker_method
+    logger.info(f"Initialized chunker method: {chunker_method}")
+    st.session_state[SessionStateSchema.CHUNKER_LOGGED] = True
 
 # Initialize embeddings model
 model = get_embeddings(

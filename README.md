@@ -6,11 +6,12 @@ A modular RAG experimentation platform built with Streamlit. Upload documents, t
 | Task | Status |
 |------|--------|
 | Initial PDF processing pipeline (Docling OCR + RecursiveCharacterTextSplitter chunking) | ✅ Done |
-|Build basic Streamlit interface with sidebar navigation | ✅ Done |
+| Build basic Streamlit interface with sidebar navigation | ✅ Done |
 | Multi-page Streamlit interface | ✅ Done |
 | Background document processing (job manager / async) | ✅ Done |
 | Vector database integration (ChromaDB) | 🚧 In Progress |
 | OpenAI-compatible LLM integration for chat | ⏳ Not Started |
+| Ollama LLM integration for chat | ⏳ Not Started |
 | First PyPI release (fixed OCR + fixed chunking) | ⏳ Not Started |
 | Support multiple OCR engines | ⏳ Not Started |
 | Add configurable OCR selection in UI | ⏳ Not Started |
