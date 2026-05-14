@@ -1,7 +1,7 @@
 import numpy as np
 import streamlit as st
 
-from rag.embedding.huggingface import embed_chunks, embed_query
+from rag.embedding.methods.huggingface import embed_chunks, embed_query
 from src.utils.logger_config import logger
 from src.utils.schema import ChunksSchema, SessionStateSchema
 

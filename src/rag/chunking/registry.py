@@ -1,5 +1,6 @@
 from src.rag.chunking.methods.recursive import RecursiveChunker
+from src.utils.schema import ConfigSchema
 
 CHUNKER_REGISTRY = {
-    "recursive_character": RecursiveChunker,
+    ConfigSchema.RECURSIVE_CHARACTER: RecursiveChunker,
 }

@@ -4,14 +4,14 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-from rag.chunking.methods.recursive import init_chunker
 from src.config_loader import (
     ChunkingMethodConfig,
     EmbeddingMethodConfig,
     ParsingMethodConfig,
     load_config,
 )
-from src.rag.embedding.huggingface import init_embedding
+from src.rag.chunking.factory import init_chunker
+from src.rag.embedding.factory import init_embedding
 from src.rag.parsing.factory import init_parser
 from src.utils.logger_config import logger
 from src.utils.schema import SessionStateSchema
