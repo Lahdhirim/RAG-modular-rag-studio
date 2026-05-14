@@ -38,10 +38,17 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
         similarities = matrix @ query_vec
 
         # Get top k most relevant chunks and filter by similarity threshold
-        # TODO: Initialize retrieval component and get its configuration
-        best_indexes = np.argsort(similarities)[-5:]
+        top_k = st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+            SessionStateSchema.RETRIEVAL_CONFIG
+        ].top_k
+        similarity_threshold = st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+            SessionStateSchema.RETRIEVAL_CONFIG
+        ].similarity_threshold
+        best_indexes = np.argsort(similarities)[-top_k:]
         filtered_indexes = [
-            best_index for best_index in best_indexes if similarities[best_index] > 0.5
+            best_index
+            for best_index in best_indexes
+            if similarities[best_index] > similarity_threshold
         ]
         logger.info(
             f"Best matching chunk indexes: {best_indexes} with respective similarities: {similarities[best_indexes]}, filtered indexes: {filtered_indexes}"
@@ -51,6 +58,9 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
         logger.info(f"Top chunks: {top_chunks}")
 
         # Display results
-        st.write("### Top relevant chunks:")
-        for chunk in top_chunks:
-            st.write(f"- {chunk[ChunksSchema.TEXT]}")
+        if not top_chunks:
+            st.write("No relevant chunks found for your query.")
+        else:
+            st.write("### Top relevant chunks:")
+            for chunk in top_chunks:
+                st.write(f"- {chunk[ChunksSchema.TEXT]}")

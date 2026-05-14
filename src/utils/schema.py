@@ -25,11 +25,11 @@ class SessionStateSchema:
     NATIVE_PARSER = "native_parser"
     OCR_PARSER = "ocr_parser"
     PARSERS_LOGGED = "parsers_logged"
-    EMBEDDINGS_LOGGED = "embeddings_logged"
     EMBEDDER = "embedder"
+    EMBEDDINGS_LOGGED = "embeddings_logged"
     SCANNED_MAP = "scanned_map"
-    CHUNKER_LOGGED = "chunker_logged"
     CHUNKER_METHOD = "chunker_method"
+    CHUNKER_LOGGED = "chunker_logged"
 
 
 class InputFileSchema:
