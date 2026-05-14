@@ -4,8 +4,8 @@ import uuid
 
 import streamlit as st
 
-from src.rag.processing import generate_file_id
-from src.services.processing_job import run_processing_job
+from src.jobs.parsing_job import run_parsing_job
+from src.rag.parsing.utils import generate_file_id
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
 from src.utils.schema import InputFileSchema, SessionStateSchema
@@ -71,11 +71,11 @@ if uploaded_files:
                 SessionStateSchema.OUTPUT_DIR: st.session_state[
                     SessionStateSchema.OUTPUT_DIR
                 ],
-                SessionStateSchema.OCR_CONVERTER: st.session_state[
-                    SessionStateSchema.OCR_CONVERTER
+                SessionStateSchema.OCR_PARSER: st.session_state[
+                    SessionStateSchema.OCR_PARSER
                 ],
-                SessionStateSchema.NATIVE_CONVERTER: st.session_state[
-                    SessionStateSchema.NATIVE_CONVERTER
+                SessionStateSchema.NATIVE_PARSER: st.session_state[
+                    SessionStateSchema.NATIVE_PARSER
                 ],
                 SessionStateSchema.CHUNKER_METHOD: st.session_state[
                     SessionStateSchema.CHUNKER_METHOD
@@ -86,7 +86,7 @@ if uploaded_files:
                 f"Initiating processing job {job.job_id} for {len(files_data)} files"
             )
             thread = threading.Thread(
-                target=run_processing_job,
+                target=run_parsing_job,
                 args=(job, files_data, session_refs),
                 daemon=True,
             )

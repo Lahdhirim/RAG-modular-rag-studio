@@ -15,7 +15,7 @@ username = st.text_input("Username", placeholder="Enter your username")
 password = st.text_input("Password", type="password", placeholder="Enter your password")
 
 if st.button("Login"):
-    if username == "admin" and password == "securepassword":
+    if username == "admin" and password == "123":
         st.session_state[SessionStateSchema.AUTHENTICATED] = True
         st.success("Logged in!")
         logger.info(f"User '{username}' logged in successfully.")

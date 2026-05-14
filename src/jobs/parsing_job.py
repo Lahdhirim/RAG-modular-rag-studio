@@ -2,7 +2,6 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from src.rag.processing import pdf_to_text
 from src.utils.background_jobs import ProcessingJob, Status
 from src.utils.logger_config import processing_job_logger as logger
 from src.utils.schema import (
@@ -13,8 +12,7 @@ from src.utils.schema import (
 )
 
 
-# TODO: Refactor codebase to chunking, embedding, retieval, llms, parsing and vector store with their respective configs
-def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
+def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
 
     logger.info(f"Starting processing job {job.job_id} with {len(files_data)} files")
     job.set_status(Status.RUNNING)
@@ -45,18 +43,18 @@ def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict)
                     shutil.copy(temp_path, copied_path)
                     logger.info(f"Copied {filename} to {copied_path}")
 
-                    # Select converter based on scanned/native status
-                    converter = (
-                        session_refs[SessionStateSchema.OCR_CONVERTER]
+                    # Select parser based on scanned/native status
+                    parser = (
+                        session_refs[SessionStateSchema.OCR_PARSER]
                         if is_scanned
-                        else session_refs[SessionStateSchema.NATIVE_CONVERTER]
+                        else session_refs[SessionStateSchema.NATIVE_PARSER]
                     )
 
                     # Convert Document to text
                     msg = "🔍 OCR..." if is_scanned else "🔍 Extracting..."
                     job.update_file(file_id=file_id, status=Status.RUNNING, msg=msg)
-                    text, successfully_processed_pages, failed_pages = pdf_to_text(
-                        str(temp_path), converter
+                    text, successfully_processed_pages, failed_pages = parser.parse(
+                        pdf_path=str(temp_path)
                     )
 
                     if successfully_processed_pages > 0:
@@ -82,7 +80,7 @@ def run_processing_job(job: ProcessingJob, files_data: dict, session_refs: dict)
                         job.update_file(
                             file_id=file_id, status=Status.RUNNING, msg="📦 Chunking..."
                         )
-                        chunks = chunker_method.split_text(text)
+                        chunks = chunker_method.chunk(text=text)
                         logger.info(
                             f"Chunked text into {len(chunks)} chunks for {filename}"
                         )

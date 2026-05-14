@@ -4,9 +4,15 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.config_loader import ParsingConfig, RAGConfig, load_config
-from src.rag.embeddings import load_embeddings_model
-from src.rag.processing import get_chunker, get_converter
+from src.config_loader import (
+    ChunkingMethodConfig,
+    EmbeddingMethodConfig,
+    ParsingMethodConfig,
+    load_config,
+)
+from src.rag.chunking.factory import init_chunker
+from src.rag.embedding.factory import init_embedding
+from src.rag.parsing.factory import init_parser
 from src.utils.logger_config import logger
 from src.utils.schema import SessionStateSchema
 
@@ -27,23 +33,25 @@ else:
 
 
 @st.cache_resource
-def get_native_converter(parsing_config: ParsingConfig):
-    return get_converter(ocr=False, parsing_config=parsing_config)
+def init_native_parser(parser_name: str, parser_config: ParsingMethodConfig):
+    return init_parser(parser_name=parser_name, parser_config=parser_config, ocr=False)
 
 
 @st.cache_resource
-def get_ocr_converter(parsing_config: ParsingConfig):
-    return get_converter(ocr=True, parsing_config=parsing_config)
+def init_ocr_parser(parser_name: str, parser_config: ParsingMethodConfig):
+    return init_parser(parser_name=parser_name, parser_config=parser_config, ocr=True)
 
 
 @st.cache_resource
-def get_chunker_method(chunking_config: RAGConfig):
-    return get_chunker(chunking_config=chunking_config)
+def init_chunker_method(chunker_name: str, chunker_config: ChunkingMethodConfig):
+    return init_chunker(chunker_name=chunker_name, chunker_config=chunker_config)
 
 
 @st.cache_resource
-def get_embeddings(model_name: str):
-    return load_embeddings_model(model_name=model_name)
+def init_embedding_method(embedding_name: str, embedding_config: EmbeddingMethodConfig):
+    return init_embedding(
+        embedding_name=embedding_name, embedding_config=embedding_config
+    )
 
 
 # Initialize session state and logging
@@ -55,6 +63,18 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     config_path = Path("config/config.json")
     config = load_config(config_path)
     logger.info(f"Loaded configuration from {config_path}: {config}")
+
+    # Get selected methods from config
+    parser_name, parser_cfg = config.get_selected_parser()
+    logger.info(f"Selected parser: {parser_name} | Config: {parser_cfg}")
+
+    chunker_name, chunker_cfg = config.get_selected_chunker()
+    logger.info(f"Selected chunker: {chunker_name} | Config: {chunker_cfg}")
+
+    embedding_name, embedding_cfg = config.get_selected_embedder()
+    logger.info(
+        f"Selected embedding method: {embedding_name} | Config: {embedding_cfg}"
+    )
 
     # Prepare directories
     COPIED_DIR = Path(config.directory_config.copied_pdfs_dir)
@@ -70,6 +90,15 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
 
     # Store in session state
     st.session_state[SessionStateSchema.CONFIG] = config
+    st.session_state[SessionStateSchema.PIPELINE_CONFIG] = {
+        SessionStateSchema.PARSER_NAME: parser_name,
+        SessionStateSchema.PARSER_CONFIG: parser_cfg,
+        SessionStateSchema.CHUNKER_NAME: chunker_name,
+        SessionStateSchema.CHUNKER_CONFIG: chunker_cfg,
+        SessionStateSchema.EMBEDDING_NAME: embedding_name,
+        SessionStateSchema.EMBEDDING_CONFIG: embedding_cfg,
+        SessionStateSchema.RETRIEVAL_CONFIG: config.retrieval_config,
+    }
     st.session_state[SessionStateSchema.KEYS] = {"OPENAI_API_KEY": OPENAI_API_KEY}
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
     st.session_state[SessionStateSchema.OUTPUT_DIR] = OUTPUT_DIR
@@ -78,36 +107,62 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     st.session_state[SessionStateSchema.VECTOR_STORE] = {"chunks": [], "matrix": None}
     st.session_state[SessionStateSchema.INITIALIZED] = True
 
-# Initialize converters
-native_converter = get_native_converter(
-    parsing_config=st.session_state[SessionStateSchema.CONFIG].parsing_config
+# Initialize parsers
+native_parser = init_native_parser(
+    parser_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.PARSER_NAME
+    ],
+    parser_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.PARSER_CONFIG
+    ],
 )
-ocr_converter = get_ocr_converter(
-    parsing_config=st.session_state[SessionStateSchema.CONFIG].parsing_config
+ocr_parser = init_ocr_parser(
+    parser_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.PARSER_NAME
+    ],
+    parser_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.PARSER_CONFIG
+    ],
 )
-if SessionStateSchema.CONVERTERS_LOGGED not in st.session_state:
-    st.session_state[SessionStateSchema.NATIVE_CONVERTER] = native_converter
-    st.session_state[SessionStateSchema.OCR_CONVERTER] = ocr_converter
-    logger.info("Initialized document converters.")
-    st.session_state[SessionStateSchema.CONVERTERS_LOGGED] = True
+if SessionStateSchema.PARSERS_LOGGED not in st.session_state:
+    st.session_state[SessionStateSchema.NATIVE_PARSER] = native_parser
+    st.session_state[SessionStateSchema.OCR_PARSER] = ocr_parser
+    st.session_state[SessionStateSchema.PARSERS_LOGGED] = True
+    logger.info(
+        f"Initialized document parsers: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.PARSER_NAME]}"
+    )
 
 # Initialize chunker
-chunker_method = get_chunker_method(
-    chunking_config=st.session_state[SessionStateSchema.CONFIG].rag_config
+chunker_method = init_chunker_method(
+    chunker_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.CHUNKER_NAME
+    ],
+    chunker_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.CHUNKER_CONFIG
+    ],
 )
 if SessionStateSchema.CHUNKER_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.CHUNKER_METHOD] = chunker_method
-    logger.info(f"Initialized chunker method: {chunker_method}")
     st.session_state[SessionStateSchema.CHUNKER_LOGGED] = True
+    logger.info(
+        f"Initialized chunker method: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.CHUNKER_NAME]}"
+    )
 
 # Initialize embeddings model
-model = get_embeddings(
-    model_name=st.session_state[SessionStateSchema.CONFIG].rag_config.embedding_model
+embedder = init_embedding_method(
+    embedding_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.EMBEDDING_NAME
+    ],
+    embedding_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.EMBEDDING_CONFIG
+    ],
 )
 if SessionStateSchema.EMBEDDINGS_LOGGED not in st.session_state:
-    st.session_state[SessionStateSchema.EMBEDDING_MODEL] = model
-    logger.info("Initialized embeddings model.")
+    st.session_state[SessionStateSchema.EMBEDDER] = embedder
     st.session_state[SessionStateSchema.EMBEDDINGS_LOGGED] = True
+    logger.info(
+        f"Initialized embeddings model: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.EMBEDDING_NAME]}"
+    )
 
 # Streamlit UI
 st.markdown("""
