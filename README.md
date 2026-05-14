@@ -45,13 +45,13 @@ All shared state is stored in Streamlit's `st.session_state` dictionary and is a
 | `parsing_results` | `dict` | Maps each file ID to its parsing metadata (filename, path, chunk count, etc.) |
 | `current_job` | `ProcessingJob` | The current background processing job, which tracks the status of uploaded files and their parsing progress |
 | `vector_store` | `dict` | Holds `chunks` (list of text chunks with metadata) and `matrix` (stacked embedding matrix used for similarity search) |
-| `native_parser` | parser | PDF-to-Markdown converter using native (non-OCR) parsing |
-| `ocr_parser` | parser | PDF-to-Markdown converter using OCR-based parsing |
+| `native_parser` | `Parser` | PDF-to-Markdown converter using native (non-OCR) parsing |
+| `ocr_parser` | `Parser` | PDF-to-Markdown converter using OCR-based parsing |
 | `parsers_logged` | `bool` | Whether the PDF parsers have been initialised and logged for this session |
-| `embedder` | embedder | Loaded sentence-transformer model instance used to embed chunks and queries |
+| `embedder` | `Embedder` | Loaded sentence-transformer model instance used to embed chunks and queries |
 | `embeddings_logged` | `bool` | Whether the embedding model has been initialised and logged for this session |
 | `scanned_map` | `dict` | Maps each file ID to its scanned status (the choice is given by the user) |
-| `chunker_method` | chunker | The chunking method selected by the user |
+| `chunker_method` | `Chunker` | The chunking method selected by the user |
 | `chunker_logged` | `bool` | Whether the chunking method has been initialised and logged for this session |
 
 # Installation
