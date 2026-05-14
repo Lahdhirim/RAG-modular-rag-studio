@@ -97,6 +97,7 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
         SessionStateSchema.CHUNKER_CONFIG: chunker_cfg,
         SessionStateSchema.EMBEDDING_NAME: embedding_name,
         SessionStateSchema.EMBEDDING_CONFIG: embedding_cfg,
+        SessionStateSchema.RETRIEVAL_CONFIG: config.retrieval_config,
     }
     st.session_state[SessionStateSchema.KEYS] = {"OPENAI_API_KEY": OPENAI_API_KEY}
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
@@ -148,7 +149,7 @@ if SessionStateSchema.CHUNKER_LOGGED not in st.session_state:
     )
 
 # Initialize embeddings model
-model = init_embedding_method(
+embedder = init_embedding_method(
     embedding_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
         SessionStateSchema.EMBEDDING_NAME
     ],
@@ -157,7 +158,7 @@ model = init_embedding_method(
     ],
 )
 if SessionStateSchema.EMBEDDINGS_LOGGED not in st.session_state:
-    st.session_state[SessionStateSchema.EMBEDDING_MODEL] = model
+    st.session_state[SessionStateSchema.EMBEDDER] = embedder
     st.session_state[SessionStateSchema.EMBEDDINGS_LOGGED] = True
     logger.info(
         f"Initialized embeddings model: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.EMBEDDING_NAME]}"
