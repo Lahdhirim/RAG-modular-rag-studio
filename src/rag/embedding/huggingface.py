@@ -5,12 +5,14 @@ from src.utils.logger_config import logger
 from src.utils.schema import ChunksSchema
 
 
-def load_embeddings_model(model_name: str):
+def get_embedding(embedding_config):
     try:
-        return HuggingFaceEmbeddings(model_name=model_name)
+        return HuggingFaceEmbeddings(model_name=embedding_config.model_name)
     except Exception as e:
         logger.error(f"Error loading embeddings model: {e}")
-        raise RuntimeError(f"Failed to load embeddings model: {model_name}") from e
+        raise RuntimeError(
+            f"Failed to load embeddings model: {embedding_config.model_name}"
+        ) from e
 
 
 def embed_chunks(chunks, model):

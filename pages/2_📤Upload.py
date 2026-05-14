@@ -3,9 +3,9 @@ import time
 import uuid
 
 import streamlit as st
-
-from src.rag.processing import generate_file_id
 from src.services.processing_job import run_processing_job
+
+from rag.parsing.methods.docling import generate_file_id
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
 from src.utils.schema import InputFileSchema, SessionStateSchema

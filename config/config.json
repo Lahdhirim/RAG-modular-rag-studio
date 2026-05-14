@@ -4,22 +4,24 @@
         "parsing_outputs_dir": "outputs/parsing_outputs"
     },
     "parsing_config":{
-        "enable_gpu": true,
-        "method_config": {
-            "docling": {
-                "enabled": true,
-                "params": {"languages": ["en", "fr"]}
-            }
+        "docling": {
+            "enabled": true,
+            "params": {"enable_gpu": true, "languages": ["en", "fr"]}
         }
     },
-    "rag_config": {
-        "chunking_config": {
-            "recursive_character": {
-                "enabled": true,
-                "params": {"chunk_size": 500, "chunk_overlap": 50}
-            }
-        },
-        "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "chunking_config": {
+        "recursive_character": {
+            "enabled": true,
+            "params": {"chunk_size": 500, "chunk_overlap": 50}
+        }
+    },
+    "embedding_config": {
+        "hugging_face": {
+            "enabled": true,
+            "params": {"embedding_model": "sentence-transformers/all-MiniLM-L6-v2"}
+        }
+    },
+    "retrieval_config": {    
         "top_k": 5,
         "similarity_threshold": 0.5
     }

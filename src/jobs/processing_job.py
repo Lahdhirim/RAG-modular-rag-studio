@@ -2,7 +2,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from src.rag.processing import pdf_to_text
+from rag.parsing.methods.docling import pdf_to_text
 from src.utils.background_jobs import ProcessingJob, Status
 from src.utils.logger_config import processing_job_logger as logger
 from src.utils.schema import (
