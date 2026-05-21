@@ -24,5 +24,11 @@
     "retrieval_config": {    
         "top_k": 5,
         "similarity_threshold": 0.5
+    },
+    "llm_config": {
+        "openai": {
+            "enabled": true,
+            "params": {"model_name": "gpt-4o-mini", "temperature": 0}
+        }
     }
 }
