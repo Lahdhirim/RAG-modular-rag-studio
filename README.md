@@ -39,7 +39,6 @@ All shared state is stored in Streamlit's `st.session_state` dictionary and is a
 | `embedding_name` | `str` | Name of the selected embedding model |
 | `embedding_config` | `dict` | Configuration dictionary for the selected embedding model |
 | `retrieval_config` | `dict` | Configuration dictionary for the selected retrieval parameters |
-| `keys` | `dict` | Dictionary containing API keys, e.g., `{"OPENAI_API_KEY": "<your_api_key>"}` |
 | `copied_dir` | `Path` | Directory where uploaded PDF files are copied for persistence |
 | `output_dir` | `Path` | Directory where parsed output Markdown files are written |
 | `parsing_results` | `dict` | Maps each file ID to its parsing metadata (filename, path, chunk count, etc.) |

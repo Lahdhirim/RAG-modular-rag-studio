@@ -2,6 +2,7 @@ class ConfigSchema:
     DOCLING = "docling"
     RECURSIVE_CHARACTER = "recursive_character"
     HUGGING_FACE = "hugging_face"
+    OPENAI = "openai"
 
 
 class SessionStateSchema:
@@ -16,7 +17,6 @@ class SessionStateSchema:
     EMBEDDING_NAME = "embedding_name"
     EMBEDDING_CONFIG = "embedding_config"
     RETRIEVAL_CONFIG = "retrieval_config"
-    KEYS = "keys"
     COPIED_DIR = "copied_dir"
     OUTPUT_DIR = "output_dir"
     PARSING_RESULTS = "parsing_results"
@@ -30,6 +30,10 @@ class SessionStateSchema:
     SCANNED_MAP = "scanned_map"
     CHUNKER_METHOD = "chunker_method"
     CHUNKER_LOGGED = "chunker_logged"
+    LLM_PROVIDER_NAME = "llm_provider_name"
+    LLM_PROVIDER_CONFIG = "llm_provider_config"
+    CHAT_LLM = "chat_llm"
+    LLM_LOGGED = "llm_logged"
 
 
 class InputFileSchema:

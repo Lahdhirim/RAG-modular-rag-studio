@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Optional
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -7,11 +8,13 @@ from dotenv import load_dotenv
 from src.config_loader import (
     ChunkingMethodConfig,
     EmbeddingMethodConfig,
+    LLMProviderConfig,
     ParsingMethodConfig,
     load_config,
 )
 from src.rag.chunking.factory import init_chunker
 from src.rag.embedding.factory import init_embedding
+from src.rag.llms.factory import init_chat_llm
 from src.rag.parsing.factory import init_parser
 from src.utils.logger_config import logger
 from src.utils.schema import SessionStateSchema
@@ -54,6 +57,19 @@ def init_embedding_method(embedding_name: str, embedding_config: EmbeddingMethod
     )
 
 
+@st.cache_resource
+def init_selected_chat_llm(
+    llm_provider_name: str,
+    llm_provider_config: LLMProviderConfig,
+    api_key: Optional[str] = None,
+):
+    return init_chat_llm(
+        llm_provider_name=llm_provider_name,
+        llm_provider_config=llm_provider_config,
+        api_key=api_key,
+    )
+
+
 # Initialize session state and logging
 if SessionStateSchema.INITIALIZED not in st.session_state:
     # Set up logging
@@ -74,6 +90,11 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     embedding_name, embedding_cfg = config.get_selected_embedder()
     logger.info(
         f"Selected embedding method: {embedding_name} | Config: {embedding_cfg}"
+    )
+
+    llm_provider_name, llm_provider_cfg = config.get_selected_llm_provider()
+    logger.info(
+        f"Selected LLM provider: {llm_provider_name} | Config: {llm_provider_cfg}"
     )
 
     # Prepare directories
@@ -98,8 +119,9 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
         SessionStateSchema.EMBEDDING_NAME: embedding_name,
         SessionStateSchema.EMBEDDING_CONFIG: embedding_cfg,
         SessionStateSchema.RETRIEVAL_CONFIG: config.retrieval_config,
+        SessionStateSchema.LLM_PROVIDER_NAME: llm_provider_name,
+        SessionStateSchema.LLM_PROVIDER_CONFIG: llm_provider_cfg,
     }
-    st.session_state[SessionStateSchema.KEYS] = {"OPENAI_API_KEY": OPENAI_API_KEY}
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
     st.session_state[SessionStateSchema.OUTPUT_DIR] = OUTPUT_DIR
     st.session_state[SessionStateSchema.PARSING_RESULTS] = {}
@@ -162,6 +184,28 @@ if SessionStateSchema.EMBEDDINGS_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.EMBEDDINGS_LOGGED] = True
     logger.info(
         f"Initialized embeddings model: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.EMBEDDING_NAME]}"
+    )
+
+# Initialize LLM
+if st.session_state[SessionStateSchema.LLM_PROVIDER_NAME] is None:
+    logger.warning(
+        "No LLM provider selected in the configuration. Chat functionality will be unavailable."
+    )
+    chat_llm = None
+else:
+    chat_llm = init_selected_chat_llm(
+        llm_provider_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+            SessionStateSchema.LLM_PROVIDER_NAME
+        ],
+        llm_provider_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+            SessionStateSchema.LLM_PROVIDER_CONFIG
+        ],
+    )
+if SessionStateSchema.LLM_LOGGED not in st.session_state:
+    st.session_state[SessionStateSchema.CHAT_LLM] = chat_llm
+    st.session_state[SessionStateSchema.LLM_LOGGED] = True
+    logger.info(
+        f"Initialized Chat LLM: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.LLM_PROVIDER_NAME]}"
     )
 
 # Streamlit UI

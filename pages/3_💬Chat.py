@@ -26,11 +26,33 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is None:
     st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] = matrix
     logger.info("Computed embeddings for all chunks and stored in session state.")
 
+
+# Initialize chat history for UI
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display previous chat messages
+for message in st.session_state.messages:
+
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
 if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
     matrix = st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"]
+    chat_llm = st.session_state[SessionStateSchema.CHAT_LLM]
 
-    query = st.text_input("Ask your question here:")
+    query = st.chat_input("Ask your question here...")
     if query:
+
+        # Display user message
+        st.session_state.messages.append(
+            {
+                "role": "user",
+                "content": query,
+            }
+        )
+        with st.chat_message("user"):
+            st.markdown(query)
         logger.info(f"Received query: {query}")
         query_vec = embed_query(query=query, embedder=embedder)
 
@@ -58,9 +80,48 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
         logger.info(f"Top chunks: {top_chunks}")
 
         # Display results
-        if not top_chunks:
-            st.write("No relevant chunks found for your query.")
+        if chat_llm:
+            context = "\n\n".join(chunk[ChunksSchema.TEXT] for chunk in top_chunks)
+            augmented_query = f"""
+                Use the following context to answer the question.
+
+                Context:
+                {context}
+
+                Question:
+                {query}
+                """
+            logger.info(f"Augmented query sent to the LLM: {augmented_query}")
+            response = chat_llm.generate(message=augmented_query)
+            if response.success:
+                with st.chat_message("assistant"):
+                    st.markdown(response.message)
+
+                st.session_state.messages.append(
+                    {
+                        "role": "assistant",
+                        "content": response.message,
+                    }
+                )
+                logger.info(f"LLM response: {response.message}")
+
+            else:
+                with st.chat_message("assistant"):
+
+                    st.error(f"LLM generation failed: {response.error}")
+
+                    st.write("### Top relevant chunks:")
+
+                    for chunk in top_chunks:
+                        st.write(f"- {chunk[ChunksSchema.TEXT]}")
+                logger.error(f"LLM generation error: {response.error}")
+
         else:
-            st.write("### Top relevant chunks:")
-            for chunk in top_chunks:
-                st.write(f"- {chunk[ChunksSchema.TEXT]}")
+            with st.chat_message("assistant"):
+
+                st.error("LLM Chat is not available.")
+
+                st.write("### Top relevant chunks:")
+
+                for chunk in top_chunks:
+                    st.write(f"- {chunk[ChunksSchema.TEXT]}")

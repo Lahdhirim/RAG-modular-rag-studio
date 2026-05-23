@@ -15,6 +15,15 @@ def validate_single_enabled(config_dict, component_name):
         )
 
 
+def validate_max_one_enabled(config_dict, component_name):
+    """Utility function to validate that at most one method is enabled in a given config dictionary."""
+
+    enabled = [name for name, cfg in config_dict.items() if cfg.enabled]
+
+    if len(enabled) > 1:
+        raise ValueError(f"At most ONE {component_name} can be enabled, got: {enabled}")
+
+
 ################## Directory Configuration ##################
 class DirectoryConfig(BaseModel):
     copied_pdfs_dir: Optional[str] = Field(
@@ -57,10 +66,29 @@ class RetrievalConfig(BaseModel):
     )
 
 
+################## LLM Provider Configuration ##################
+class LLMProviderConfig(BaseModel):
+    enabled: bool = Field(..., description="Whether the LLM provider is enabled")
+    model_name: Optional[str] = Field(
+        default="gpt-4o-mini", description="Name of the LLM model to use"
+    )
+    base_url: Optional[str] = Field(
+        default=None, description="Base URL for provider endpoint"
+    )
+    temperature: Optional[float] = Field(
+        default=0, description="Temperature setting for the LLM"
+    )
+    system_prompt: Optional[str] = Field(
+        default="You are a helpful assistant for answering questions based on the provided context. Always use the provided context to answer questions and do not make up information. If you don't know the answer, say you don't know.",
+        description="System prompt to guide the LLM's behavior",
+    )
+
+
 ################## Main configuration ##################
 AllowedParserNames = Literal["docling"]
 AllowedChunkerNames = Literal["recursive_character"]
 AllowedEmbeddingNames = Literal["hugging_face"]
+AllowedLLMProviders = Literal["openai"]
 
 
 class StudioRAGConfig(BaseModel):
@@ -79,8 +107,11 @@ class StudioRAGConfig(BaseModel):
     retrieval_config: RetrievalConfig = Field(
         ..., description="Retrieval configuration"
     )
+    llm_config: Dict[AllowedLLMProviders, LLMProviderConfig] = Field(
+        ..., description="LLM provider configuration"
+    )
 
-    # Validate that exactly one method is enabled for parsing, chunking and embedding
+    # Validate that exactly one method is enabled for parsing, chunking, embedding and LLM provider
     @model_validator(mode="after")
     def validate_configs(self):
 
@@ -89,6 +120,8 @@ class StudioRAGConfig(BaseModel):
         validate_single_enabled(self.chunking_config, "chunker")
 
         validate_single_enabled(self.embedding_config, "embedding")
+
+        validate_max_one_enabled(self.llm_config, "LLM provider")
 
         return self
 
@@ -109,6 +142,13 @@ class StudioRAGConfig(BaseModel):
         for name, cfg in self.embedding_config.items():
             if cfg.enabled:
                 return name, cfg
+
+    # Get the selected LLM provider and its config
+    def get_selected_llm_provider(self):
+        for name, cfg in self.llm_config.items():
+            if cfg.enabled:
+                return name, cfg
+        return None, None
 
 
 def load_config(path: str) -> StudioRAGConfig:
