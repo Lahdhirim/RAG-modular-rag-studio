@@ -187,7 +187,12 @@ if SessionStateSchema.EMBEDDINGS_LOGGED not in st.session_state:
     )
 
 # Initialize LLM
-if st.session_state[SessionStateSchema.LLM_PROVIDER_NAME] is None:
+if (
+    st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.LLM_PROVIDER_NAME
+    ]
+    is None
+):
     logger.warning(
         "No LLM provider selected in the configuration. Chat functionality will be unavailable."
     )
@@ -200,6 +205,7 @@ else:
         llm_provider_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
             SessionStateSchema.LLM_PROVIDER_CONFIG
         ],
+        api_key=OPENAI_API_KEY,
     )
 if SessionStateSchema.LLM_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.CHAT_LLM] = chat_llm

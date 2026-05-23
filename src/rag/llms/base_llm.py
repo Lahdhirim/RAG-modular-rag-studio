@@ -31,3 +31,7 @@ class BaseLLM(ABC):
 
     def get_config(self):
         return self.config
+
+    # TODO: Add a method to reset the chat history
+
+    # TODO: Add a method to ping client

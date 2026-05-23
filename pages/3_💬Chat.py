@@ -91,6 +91,7 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
                 Question:
                 {query}
                 """
+            # TODO: Add logger for chat history and LLM responses
             logger.info(f"Augmented query sent to the LLM: {augmented_query}")
             response = chat_llm.generate(message=augmented_query)
             if response.success:
@@ -119,7 +120,9 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
         else:
             with st.chat_message("assistant"):
 
-                st.error("LLM Chat is not available.")
+                st.error(
+                    "LLM Chat is not available. Only raw retrieval results are displayed."
+                )
 
                 st.write("### Top relevant chunks:")
 
