@@ -2,7 +2,7 @@ import numpy as np
 import streamlit as st
 
 from src.rag.embedding.utils import embed_chunks, embed_query
-from src.utils.logger_config import logger
+from src.utils.logger_config import chat_logger, logger
 from src.utils.schema import ChunksSchema, SessionStateSchema
 
 # Set Streamlit page configuration
@@ -26,11 +26,33 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is None:
     st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] = matrix
     logger.info("Computed embeddings for all chunks and stored in session state.")
 
+
+# Initialize chat history for UI
+if SessionStateSchema.MESSAGES not in st.session_state:
+    st.session_state[SessionStateSchema.MESSAGES] = []
+
+# Display previous chat messages
+for message in st.session_state[SessionStateSchema.MESSAGES]:
+
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
 if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
     matrix = st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"]
+    chat_llm = st.session_state[SessionStateSchema.CHAT_LLM]
 
-    query = st.text_input("Ask your question here:")
+    query = st.chat_input("Ask your question here...")
     if query:
+
+        # Display user message
+        st.session_state[SessionStateSchema.MESSAGES].append(
+            {
+                "role": "user",
+                "content": query,
+            }
+        )
+        with st.chat_message("user"):
+            st.markdown(query)
         logger.info(f"Received query: {query}")
         query_vec = embed_query(query=query, embedder=embedder)
 
@@ -58,9 +80,62 @@ if st.session_state[SessionStateSchema.VECTOR_STORE]["matrix"] is not None:
         logger.info(f"Top chunks: {top_chunks}")
 
         # Display results
-        if not top_chunks:
-            st.write("No relevant chunks found for your query.")
+        if chat_llm and chat_llm.is_available:
+            context = "\n\n".join(chunk[ChunksSchema.TEXT] for chunk in top_chunks)
+            augmented_query = f"""
+                Use the following context to answer the question.
+
+                Context:
+                {context}
+
+                Question:
+                {query}
+                """
+
+            chat_logger.info(f"Augmented query sent to the LLM: {augmented_query}")
+            response = chat_llm.generate(message=augmented_query)
+            if response.success:
+                with st.chat_message("assistant"):
+                    st.markdown(response.message)
+
+                    # Display top relevant chunks for transparency
+                    with st.expander("📚 References"):
+
+                        for i, chunk in enumerate(top_chunks, start=1):
+                            st.markdown(f"### Chunk {i}")
+                            st.markdown(f"**Source:** {chunk[ChunksSchema.SOURCE]}")
+                            st.markdown(chunk[ChunksSchema.TEXT])
+                            st.divider()
+
+                st.session_state[SessionStateSchema.MESSAGES].append(
+                    {
+                        "role": "assistant",
+                        "content": response.message,
+                    }
+                )
+                chat_logger.info(f"LLM response: {response.message}")
+
+            else:
+                with st.chat_message("assistant"):
+
+                    st.error(f"LLM generation failed: {response.error}")
+
+                    st.write("### Top relevant chunks:")
+
+                    for chunk in top_chunks:
+                        st.write(f"- {chunk[ChunksSchema.TEXT]}")
+                chat_logger.error(f"LLM generation error: {response.error}")
+                chat_logger.info(f"Top relevant chunk: {chunk[ChunksSchema.TEXT]}")
+
         else:
-            st.write("### Top relevant chunks:")
-            for chunk in top_chunks:
-                st.write(f"- {chunk[ChunksSchema.TEXT]}")
+            with st.chat_message("assistant"):
+
+                st.error(
+                    "LLM Chat is not available. Only raw retrieval results are displayed."
+                )
+
+                st.write("### Top relevant chunks:")
+
+                for chunk in top_chunks:
+                    st.write(f"- {chunk[ChunksSchema.TEXT]}")
+                    chat_logger.info(f"Top relevant chunk: {chunk[ChunksSchema.TEXT]}")

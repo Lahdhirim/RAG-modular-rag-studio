@@ -12,7 +12,7 @@
     "chunking_config": {
         "recursive_character": {
             "enabled": true,
-            "params": {"chunk_size": 500, "chunk_overlap": 50}
+            "params": {"chunk_size": 300, "chunk_overlap": 50}
         }
     },
     "embedding_config": {
@@ -24,5 +24,13 @@
     "retrieval_config": {    
         "top_k": 5,
         "similarity_threshold": 0.5
+    },
+    "llm_config": {
+        "openai": {
+            "enabled": true,
+            "model_name": "gpt-4o-mini", 
+            "temperature": 0,
+            "system_prompt": "You are a helpful assistant for answering questions based on the provided context. Always use the provided context to answer questions and do not make up information. If you don't know the answer, say you don't know."
+        }
     }
 }

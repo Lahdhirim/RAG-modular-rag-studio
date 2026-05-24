@@ -98,6 +98,8 @@ if uploaded_files:
 # Display job status
 if job is not None:
 
+    # TODO: Add number of processed pages over total pages for better progress tracking
+
     st.subheader("Job Status Process")
 
     col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
