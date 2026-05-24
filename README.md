@@ -10,8 +10,8 @@ A modular RAG experimentation platform built with Streamlit. Upload documents, t
 | Multi-page Streamlit interface | ✅ Done |
 | Background document processing (job manager / async) | ✅ Done |
 | Separate pipeline components (Parser, Chunker, Embedding) with their respective configuration | ✅ Done |
-| OpenAI-compatible LLM integration for chat | 🚧 In Progress |
-| Vector database integration (ChromaDB) | ⏳ Not Started |
+| OpenAI-compatible LLM integration for chat | ✅ Done |
+| Vector database integration (ChromaDB) | 🚧 In Progress |
 | User session management | ⏳ Not Started |
 | Ollama LLM integration for chat | ⏳ Not Started |
 | First PyPI release (fixed parser + fixed chunking) | ⏳ Not Started |
@@ -52,6 +52,11 @@ All shared state is stored in Streamlit's `st.session_state` dictionary and is a
 | `scanned_map` | `dict` | Maps each file ID to its scanned status (the choice is given by the user) |
 | `chunker_method` | `Chunker` | The chunking method selected by the user |
 | `chunker_logged` | `bool` | Whether the chunking method has been initialised and logged for this session |
+| `llm_provider_name` | `str` | Name of the selected LLM provider for chat (e.g. "openai") |
+| `llm_provider_config` | `dict` | Configuration dictionary for the selected LLM provider (e.g. model name, temperature, system prompt) |
+| `chat_llm` | `LLM` | Loaded LLM instance used to answer user queries in the chat interface |
+| `llm_logged` | `bool` | Whether the LLM has been initialised and logged for this session |
+| `messages` | `list` | List of chat messages in the current conversation |
 
 # Installation
 
