@@ -1,4 +1,4 @@
-# RAG-modular-rag-studio
+# Modulaire RAG Studio (Under Development 🚧)
 A modular RAG experimentation platform built with Streamlit. Upload documents, test different chunking methods, select LLM providers, and interact with your knowledge base through chat.
 
 # Backlog
