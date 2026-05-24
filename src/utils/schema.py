@@ -34,6 +34,7 @@ class SessionStateSchema:
     LLM_PROVIDER_CONFIG = "llm_provider_config"
     CHAT_LLM = "chat_llm"
     LLM_LOGGED = "llm_logged"
+    MESSAGES = "messages"
 
 
 class InputFileSchema:

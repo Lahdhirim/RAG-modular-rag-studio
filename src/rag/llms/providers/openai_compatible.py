@@ -23,6 +23,7 @@ class OpenAICompatibleLLM(BaseLLM):
         self.temperature = config.temperature
         self.base_url = config.base_url
         self.client = self.initialize_client()
+        self.is_available = self._ping()
 
     def initialize_client(self):
         if self.api_key:
@@ -41,8 +42,19 @@ class OpenAICompatibleLLM(BaseLLM):
         else:
             logger.error("API key is required to initialize OpenAI client")
             raise ValueError(
-                "API key is required to initialize OpenAI client. Please provide a valid API key in the .env file."
+                "API key is required to initialize OpenAI client. Please provide a valid API key in the .env file (OPENAI_API_KEY=<your_api_key>)."
             )
+
+    def _ping(self) -> bool:
+
+        try:
+            self.client.models.list()
+            logger.info("LLM provider is available.")
+            return True
+
+        except Exception as e:
+            logger.error(f"LLM provider ping failed: {e}")
+            return False
 
     def generate(self, message: str) -> LLMResponse:
 

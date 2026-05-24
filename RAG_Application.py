@@ -106,7 +106,7 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
 
     # Load environment variables
     load_dotenv()
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     logger.info("Loaded environment variables.")
 
     # Store in session state
@@ -240,19 +240,19 @@ Go to the **Upload** page:
 
 ---
 
-### 3. 📚 View Documents
-Visit the **Documents** page to:
-            
-    - See parsed results  
-    - Explore generated chunks  
-
----
-
-### 4. 💬 Chat
+### 3. 💬 Chat
 Go to the **Chat** page to:
             
     - Ask questions about your documents  
     - Retrieve the most relevant content  
+                      
+---
+
+### 4. 📚 View Documents
+Visit the **Documents** page to:
+            
+    - See parsed results  
+    - Explore generated chunks  
 
 ---
 

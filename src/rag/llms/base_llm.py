@@ -20,6 +20,7 @@ class BaseLLM(ABC):
         self.config = config
         self.api_key = api_key
         self.chat_history = [{"role": "system", "content": self.config.system_prompt}]
+        self.is_available = False
 
     @abstractmethod
     def initialize_client(self):
@@ -34,4 +35,6 @@ class BaseLLM(ABC):
 
     # TODO: Add a method to reset the chat history
 
-    # TODO: Add a method to ping client
+    @abstractmethod
+    def _ping(self) -> bool:
+        pass

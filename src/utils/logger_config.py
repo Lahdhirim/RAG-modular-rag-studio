@@ -36,3 +36,6 @@ logger = create_logger("main_logger", "logs/app.log")
 processing_job_logger = create_logger(
     "processing_job_logger", "logs/processing_job.log", propagate=False
 )
+
+# Logger for chat interactions
+chat_logger = create_logger("chat_logger", "logs/chat.log", propagate=False)
