@@ -38,7 +38,7 @@ class HuggingFaceEmbedding(BaseEmbedding):
 
     def embed_query(
         self,
-        text: str,
+        query: str,
     ):
 
-        return self.model.embed_query(text)
+        return self.model.embed_query(query)

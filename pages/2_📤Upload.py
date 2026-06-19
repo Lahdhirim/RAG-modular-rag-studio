@@ -8,7 +8,7 @@ from src.jobs.parsing_job import run_parsing_job
 from src.rag.parsing.utils import generate_file_id
 from src.utils.background_jobs import FileJob, ProcessingJob, Status
 from src.utils.logger_config import logger
-from src.utils.schema import InputFileSchema, SessionStateSchema
+from src.utils.schema import ChunksSchema, InputFileSchema, SessionStateSchema
 
 if not st.session_state.get(SessionStateSchema.AUTHENTICATED, False):
     st.warning("You need to log in first to access this page.")
@@ -123,11 +123,32 @@ if job is not None:
             f"Processing job {job.job_id} completed successfully with {len(job.files)} files processed."
         )
 
-        # Inject results
+        # Inject results in vector store
         st.session_state[SessionStateSchema.PARSING_RESULTS].update(job.parsing_results)
-        st.session_state[SessionStateSchema.VECTOR_STORE]["chunks"].extend(job.chunks)
+        vector_store = st.session_state[SessionStateSchema.VECTOR_STORE]
+        documents = [chunk[ChunksSchema.TEXT] for chunk in job.chunks]
+        metadatas = [
+            {
+                ChunksSchema.SOURCE: chunk[ChunksSchema.SOURCE],
+                ChunksSchema.SOURCE_ID: chunk[ChunksSchema.SOURCE_ID],
+                ChunksSchema.IS_SCANNED: chunk[ChunksSchema.IS_SCANNED],
+            }
+            for chunk in job.chunks
+        ]
+        ids = [
+            f"{chunk[ChunksSchema.SOURCE_ID]}_{i}" for i, chunk in enumerate(job.chunks)
+        ]
+        embeddings = st.session_state[SessionStateSchema.EMBEDDER].embed_documents(
+            texts=documents
+        )
+        vector_store.store(
+            ids=ids,
+            embeddings=embeddings,
+            documents=documents,
+            metadata=metadatas,
+        )
         logger.info(
-            f"Updated session state with parsing results and chunks from job {job.job_id}. Total chunks in vector store: {len(st.session_state[SessionStateSchema.VECTOR_STORE]['chunks'])}"
+            f"Injected {len(job.chunks)} chunks into vector store for job {job.job_id}"
         )
 
         # Clear current job from session state

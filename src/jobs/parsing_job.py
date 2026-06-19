@@ -72,6 +72,7 @@ def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
                         output_path = (
                             session_refs[SessionStateSchema.OUTPUT_DIR] / f"{stem}.md"
                         )
+
                         output_path.write_text(text, encoding="utf-8")
                         logger.info(f"Saved Markdown file: {output_path}")
 
@@ -81,6 +82,7 @@ def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
                             file_id=file_id, status=Status.RUNNING, msg="📦 Chunking..."
                         )
                         chunks = chunker_method.chunk(text=text)
+                        # TODO: Save also chunks in a separate .md file
                         logger.info(
                             f"Chunked text into {len(chunks)} chunks for {filename}"
                         )

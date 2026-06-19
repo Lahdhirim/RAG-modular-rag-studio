@@ -21,6 +21,16 @@
             "params": {"embedding_model": "sentence-transformers/all-MiniLM-L6-v2"}
         }
     },
+    "vector_store_config": {
+        "chroma" : {
+            "enabled": true,
+            "params": {
+                "persist_dir": "./vector_stores/chromaDB",
+                "collection_name": "documents",
+                "distance_metric": "cosine"
+            }
+        }
+    },
     "retrieval_config": {    
         "top_k": 5,
         "similarity_threshold": 0.5

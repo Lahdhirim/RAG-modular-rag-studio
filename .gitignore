@@ -7,3 +7,4 @@ __pycache__/
 commands.txt
 archive
 logs
+vector_stores

@@ -3,6 +3,7 @@ class ConfigSchema:
     RECURSIVE_CHARACTER = "recursive_character"
     HUGGING_FACE = "hugging_face"
     OPENAI = "openai"
+    CHROMA = "chroma"
 
 
 class SessionStateSchema:
@@ -35,6 +36,9 @@ class SessionStateSchema:
     CHAT_LLM = "chat_llm"
     LLM_LOGGED = "llm_logged"
     MESSAGES = "messages"
+    VECTOR_STORE_NAME = "vector_store_name"
+    VECTOR_STORE_CONFIG = "vector_store_config"
+    VECTOR_STORE_LOGGED = "vector_store_logged"
 
 
 class InputFileSchema:
@@ -56,3 +60,10 @@ class ChunksSchema:
     SOURCE = "source"
     SOURCE_ID = "source_id"
     IS_SCANNED = "is_scanned"
+
+
+class RetrievalSchema:
+    ID = "id"
+    TEXT = "text"
+    SCORE = "score"
+    METADATA = "metadata"

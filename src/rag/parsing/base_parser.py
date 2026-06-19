@@ -9,4 +9,5 @@ class BaseParser(ABC):
 
     @abstractmethod
     def parse(self, file_path: str):
+        # TODO: Add docstring
         pass
