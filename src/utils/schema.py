@@ -20,6 +20,7 @@ class SessionStateSchema:
     RETRIEVAL_CONFIG = "retrieval_config"
     COPIED_DIR = "copied_dir"
     OUTPUT_DIR = "output_dir"
+    CHUNKING_OUTPUT_DIR = "chunking_output_dir"
     PARSING_RESULTS = "parsing_results"
     CURRENT_JOB = "current_job"
     VECTOR_STORE = "vector_store"

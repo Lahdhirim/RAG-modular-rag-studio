@@ -4,10 +4,10 @@ from enum import Enum
 
 
 class Status(str, Enum):
-    PENDING = "pending"
-    RUNNING = "running"
-    DONE = "done"
-    ERROR = "error"
+    PENDING = "Pending"
+    RUNNING = "Running"
+    DONE = "Done"
+    ERROR = "Error"
 
 
 @dataclass

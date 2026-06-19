@@ -30,6 +30,10 @@ if SessionStateSchema.SCANNED_MAP not in st.session_state:
     st.session_state[SessionStateSchema.SCANNED_MAP] = {}
 scanned_map = st.session_state[SessionStateSchema.SCANNED_MAP]
 
+# Get vector store instance
+vector_store = st.session_state[SessionStateSchema.VECTOR_STORE]
+existing_source_ids = vector_store.get_source_ids()
+
 # Upload and process PDFs
 if uploaded_files:
 
@@ -43,14 +47,25 @@ if uploaded_files:
     if st.button("Process PDF files", disabled=is_processing):
 
         files_data = []
-        job = ProcessingJob(job_id=str(uuid.uuid4()), files=[])
+        skipped_files = []
 
         for uploaded_file in uploaded_files:
             file_id = generate_file_id(uploaded_file)
 
+            if file_id in existing_source_ids:
+                st.warning(
+                    f"File {uploaded_file.name} has already been processed. Skipping."
+                )
+                logger.warning(
+                    f"File {uploaded_file.name} with ID {file_id} has already been processed. Skipping."
+                )
+                skipped_files.append(uploaded_file.name)
+                continue
+
             if file_id in st.session_state[SessionStateSchema.PARSING_RESULTS]:
                 continue
 
+            job = ProcessingJob(job_id=str(uuid.uuid4()), files=[])
             files_data.append(
                 {
                     InputFileSchema.FILE_ID: file_id,
@@ -70,6 +85,9 @@ if uploaded_files:
                 ],
                 SessionStateSchema.OUTPUT_DIR: st.session_state[
                     SessionStateSchema.OUTPUT_DIR
+                ],
+                SessionStateSchema.CHUNKING_OUTPUT_DIR: st.session_state[
+                    SessionStateSchema.CHUNKING_OUTPUT_DIR
                 ],
                 SessionStateSchema.OCR_PARSER: st.session_state[
                     SessionStateSchema.OCR_PARSER
@@ -95,6 +113,14 @@ if uploaded_files:
             logger.info(f"Starting background thread for job {job.job_id}")
             thread.start()
 
+        else:
+            st.warning(
+                "No new files to process. All uploaded files have already been processed."
+            )
+            logger.info(
+                "No new files to process. All uploaded files have already been processed."
+            )
+
 # Display job status
 if job is not None:
 
@@ -112,7 +138,7 @@ if job is not None:
         col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
         col1.write(f"**{f.filename}**")
         col2.write(f"{scanned_map.get(f.filename, 'Unknown')}")
-        col3.write(f"Status: {f.status.value}")
+        col3.write(f"{f.status.value}")
         col4.write(f"{f.progress_msg}")
         if f.error:
             col5.error(f"Error: {f.error}")
@@ -125,8 +151,7 @@ if job is not None:
 
         # Inject results in vector store
         st.session_state[SessionStateSchema.PARSING_RESULTS].update(job.parsing_results)
-        vector_store = st.session_state[SessionStateSchema.VECTOR_STORE]
-        documents = [chunk[ChunksSchema.TEXT] for chunk in job.chunks]
+        chunks = [chunk[ChunksSchema.TEXT] for chunk in job.chunks]
         metadatas = [
             {
                 ChunksSchema.SOURCE: chunk[ChunksSchema.SOURCE],
@@ -139,12 +164,13 @@ if job is not None:
             f"{chunk[ChunksSchema.SOURCE_ID]}_{i}" for i, chunk in enumerate(job.chunks)
         ]
         embeddings = st.session_state[SessionStateSchema.EMBEDDER].embed_documents(
-            texts=documents
+            texts=chunks
         )
+
         vector_store.store(
             ids=ids,
             embeddings=embeddings,
-            documents=documents,
+            chunks=chunks,
             metadata=metadatas,
         )
         logger.info(

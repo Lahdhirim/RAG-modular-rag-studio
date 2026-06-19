@@ -17,44 +17,44 @@ class BaseVectorStore(ABC):
         self,
         ids: list[str],
         embeddings: list[list[float]],
-        documents: list[str],
+        chunks: list[str],
         metadata: list[dict] | None = None,
     ) -> None:
-        """Store embeddings and documents in vector store.
+        """Store embeddings and chunks in vector store.
 
         Args:
-            ids: List of unique document identifiers.
+            ids: List of unique chunk identifiers.
             embeddings: List of embedding vectors.
-            documents: List of document texts.
-            metadata: Optional list of metadata dictionaries for each document.
+            chunks: List of chunk texts.
+            metadata: Optional list of metadata dictionaries for each chunk.
         """
         pass
 
     @abstractmethod
     def search(self, query_embedding: list[float], top_k: int = 5) -> list[dict]:
-        """Search for similar documents.
+        """Search for similar chunks.
 
         Args:
             query_embedding: Query embedding vector.
             top_k: Number of top results to return.
 
         Returns:
-            List of dictionaries with keys: 'id', 'document', 'distance', 'metadata'.
+            List of dictionaries with keys: 'id', 'text', 'score', 'metadata'.
         """
         pass
 
     @abstractmethod
     def delete(self, ids: list[str]) -> None:
-        """Delete documents by IDs.
+        """Delete chunks by IDs.
 
         Args:
-            ids: List of document IDs to delete.
+            ids: List of chunk IDs to delete.
         """
         pass
 
     @abstractmethod
     def clear(self) -> None:
-        """Clear all documents from vector store."""
+        """Clear all chunks from the vector store."""
         pass
 
     @abstractmethod
@@ -63,10 +63,14 @@ class BaseVectorStore(ABC):
         ids: list[str] | None = None,
         include: list[str] | None = None,
     ) -> dict:
-        """Retrieve documents from the vector store."""
+        """Retrieve chunks from the vector store."""
+        pass
+
+    @abstractmethod
+    def get_source_ids(self) -> set[str]:
         pass
 
     @abstractmethod
     def count(self) -> int:
-        """Return the number of documents in the vector store."""
+        """Return the number of chunks in the vector store."""
         pass

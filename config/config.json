@@ -1,7 +1,8 @@
 {   
     "directory_config": {
         "copied_pdfs_dir": "outputs/copied_pdfs",
-        "parsing_outputs_dir": "outputs/parsing_outputs"
+        "parsing_outputs_dir": "outputs/parsing_outputs",
+        "chunking_outputs_dir": "outputs/chunking_outputs"
     },
     "parsing_config":{
         "docling": {
@@ -24,6 +25,7 @@
     "vector_store_config": {
         "chroma" : {
             "enabled": true,
+            "enable_replacement": false,
             "params": {
                 "persist_dir": "./vector_stores/chromaDB",
                 "collection_name": "documents",

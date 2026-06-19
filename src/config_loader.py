@@ -32,6 +32,9 @@ class DirectoryConfig(BaseModel):
     parsing_outputs_dir: Optional[str] = Field(
         default="outputs/parsing_outputs", description="Directory for parsing outputs"
     )
+    chunking_outputs_dir: Optional[str] = Field(
+        default="outputs/chunking_outputs", description="Directory for chunking outputs"
+    )
 
 
 ################## Parsing Configuration ##################

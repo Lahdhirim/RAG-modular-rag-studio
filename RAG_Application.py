@@ -113,9 +113,13 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     # Prepare directories
     COPIED_DIR = Path(config.directory_config.copied_pdfs_dir)
     OUTPUT_DIR = Path(config.directory_config.parsing_outputs_dir)
+    CHUNKING_OUTPUT_DIR = Path(config.directory_config.chunking_outputs_dir)
     COPIED_DIR.mkdir(exist_ok=True, parents=True)
     OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
-    logger.info(f"Created directories: {COPIED_DIR}, {OUTPUT_DIR}")
+    CHUNKING_OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
+    logger.info(
+        f"Created directories: {COPIED_DIR}, {OUTPUT_DIR}, {CHUNKING_OUTPUT_DIR}"
+    )
 
     # Load environment variables
     load_dotenv()
@@ -139,6 +143,7 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     }
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
     st.session_state[SessionStateSchema.OUTPUT_DIR] = OUTPUT_DIR
+    st.session_state[SessionStateSchema.CHUNKING_OUTPUT_DIR] = CHUNKING_OUTPUT_DIR
     st.session_state[SessionStateSchema.PARSING_RESULTS] = {}
     st.session_state[SessionStateSchema.CURRENT_JOB] = None
     st.session_state[SessionStateSchema.INITIALIZED] = True
