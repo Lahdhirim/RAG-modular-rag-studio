@@ -12,6 +12,32 @@ from src.utils.schema import (
 )
 
 
+def save_chunks(
+    chunks: list[dict],
+    output_path: Path,
+) -> None:
+    """Save chunks and metadata as a Markdown file."""
+
+    content = []
+
+    for i, chunk in enumerate(chunks, start=1):
+        content.append(f"""# Chunk {i}
+
+**Source:** {chunk[ChunksSchema.SOURCE]}
+**Source ID:** {chunk[ChunksSchema.SOURCE_ID]}
+**Scanned:** {chunk[ChunksSchema.IS_SCANNED]}
+
+{chunk[ChunksSchema.TEXT]}
+
+---
+""")
+
+    output_path.write_text(
+        "\n".join(content),
+        encoding="utf-8",
+    )
+
+
 def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
 
     logger.info(f"Starting processing job {job.job_id} with {len(files_data)} files")
@@ -64,11 +90,6 @@ def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
 
                         # Save in Markdown format
                         stem = Path(filename).stem
-                        job.update_file(
-                            file_id=file_id,
-                            status=Status.RUNNING,
-                            msg="💾 Saving Markdown...",
-                        )
                         output_path = (
                             session_refs[SessionStateSchema.OUTPUT_DIR] / f"{stem}.md"
                         )
@@ -76,11 +97,17 @@ def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
                         logger.info(f"Saved Markdown file: {output_path}")
 
                         # Chunking
+                        job.update_file(
+                            file_id=file_id,
+                            status=Status.RUNNING,
+                            msg="📦 Chunking...",
+                        )
                         chunker_method = session_refs[SessionStateSchema.CHUNKER_METHOD]
                         job.update_file(
                             file_id=file_id, status=Status.RUNNING, msg="📦 Chunking..."
                         )
                         chunks = chunker_method.chunk(text=text)
+
                         logger.info(
                             f"Chunked text into {len(chunks)} chunks for {filename}"
                         )
@@ -93,6 +120,14 @@ def run_parsing_job(job: ProcessingJob, files_data: dict, session_refs: dict):
                             }
                             for chunk in chunks
                         ]
+
+                        # Save chunks to chunking output directory
+                        chunking_output_path = (
+                            session_refs[SessionStateSchema.CHUNKING_OUTPUT_DIR]
+                            / f"{stem}_chunks.md"
+                        )
+                        save_chunks(chunks_with_metadata, chunking_output_path)
+                        logger.info(f"Saved chunks file: {chunking_output_path}")
 
                         # Update job with results
                         job.add_result(

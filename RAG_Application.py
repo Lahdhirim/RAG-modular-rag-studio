@@ -16,6 +16,7 @@ from src.rag.chunking.factory import init_chunker
 from src.rag.embedding.factory import init_embedding
 from src.rag.llms.factory import init_chat_llm
 from src.rag.parsing.factory import init_parser
+from src.rag.vector_store.factory import init_vector_store
 from src.utils.logger_config import logger
 from src.utils.schema import SessionStateSchema
 
@@ -58,6 +59,13 @@ def init_embedding_method(embedding_name: str, embedding_config: EmbeddingMethod
 
 
 @st.cache_resource
+def init_vector_store_method(vector_store_name: str, vector_store_config: dict):
+    return init_vector_store(
+        vector_store_name=vector_store_name, vector_store_config=vector_store_config
+    )
+
+
+@st.cache_resource
 def init_selected_chat_llm(
     llm_provider_name: str,
     llm_provider_config: LLMProviderConfig,
@@ -92,6 +100,11 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
         f"Selected embedding method: {embedding_name} | Config: {embedding_cfg}"
     )
 
+    vector_store_name, vector_store_config = config.get_selected_vector_store()
+    logger.info(
+        f"Selected vector store: {vector_store_name} | Config: {vector_store_config}"
+    )
+
     llm_provider_name, llm_provider_cfg = config.get_selected_llm_provider()
     logger.info(
         f"Selected LLM provider: {llm_provider_name} | Config: {llm_provider_cfg}"
@@ -100,9 +113,13 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
     # Prepare directories
     COPIED_DIR = Path(config.directory_config.copied_pdfs_dir)
     OUTPUT_DIR = Path(config.directory_config.parsing_outputs_dir)
+    CHUNKING_OUTPUT_DIR = Path(config.directory_config.chunking_outputs_dir)
     COPIED_DIR.mkdir(exist_ok=True, parents=True)
     OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
-    logger.info(f"Created directories: {COPIED_DIR}, {OUTPUT_DIR}")
+    CHUNKING_OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
+    logger.info(
+        f"Created directories: {COPIED_DIR}, {OUTPUT_DIR}, {CHUNKING_OUTPUT_DIR}"
+    )
 
     # Load environment variables
     load_dotenv()
@@ -121,12 +138,14 @@ if SessionStateSchema.INITIALIZED not in st.session_state:
         SessionStateSchema.RETRIEVAL_CONFIG: config.retrieval_config,
         SessionStateSchema.LLM_PROVIDER_NAME: llm_provider_name,
         SessionStateSchema.LLM_PROVIDER_CONFIG: llm_provider_cfg,
+        SessionStateSchema.VECTOR_STORE_NAME: vector_store_name,
+        SessionStateSchema.VECTOR_STORE_CONFIG: vector_store_config,
     }
     st.session_state[SessionStateSchema.COPIED_DIR] = COPIED_DIR
     st.session_state[SessionStateSchema.OUTPUT_DIR] = OUTPUT_DIR
+    st.session_state[SessionStateSchema.CHUNKING_OUTPUT_DIR] = CHUNKING_OUTPUT_DIR
     st.session_state[SessionStateSchema.PARSING_RESULTS] = {}
     st.session_state[SessionStateSchema.CURRENT_JOB] = None
-    st.session_state[SessionStateSchema.VECTOR_STORE] = {"chunks": [], "matrix": None}
     st.session_state[SessionStateSchema.INITIALIZED] = True
 
 # Initialize parsers
@@ -184,6 +203,22 @@ if SessionStateSchema.EMBEDDINGS_LOGGED not in st.session_state:
     st.session_state[SessionStateSchema.EMBEDDINGS_LOGGED] = True
     logger.info(
         f"Initialized embeddings model: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.EMBEDDING_NAME]}"
+    )
+
+# Initialize vector store
+vector_store = init_vector_store_method(
+    vector_store_name=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.VECTOR_STORE_NAME
+    ],
+    vector_store_config=st.session_state[SessionStateSchema.PIPELINE_CONFIG][
+        SessionStateSchema.VECTOR_STORE_CONFIG
+    ],
+)
+if SessionStateSchema.VECTOR_STORE_LOGGED not in st.session_state:
+    st.session_state[SessionStateSchema.VECTOR_STORE] = vector_store
+    st.session_state[SessionStateSchema.VECTOR_STORE_LOGGED] = True
+    logger.info(
+        f"Initialized vector store: {st.session_state[SessionStateSchema.PIPELINE_CONFIG][SessionStateSchema.VECTOR_STORE_NAME]}"
     )
 
 # Initialize LLM
@@ -249,7 +284,7 @@ Go to the **Chat** page to:
 ---
 
 ### 4. 📚 View Documents
-Visit the **Documents** page to:
+Visit the **Collection** page to:
             
     - See parsed results  
     - Explore generated chunks  

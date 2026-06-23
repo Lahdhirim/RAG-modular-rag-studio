@@ -11,10 +11,10 @@ A modular RAG experimentation platform built with Streamlit. Upload documents, t
 | Background document processing (job manager / async) | ✅ Done |
 | Separate pipeline components (Parser, Chunker, Embedding) with their respective configuration | ✅ Done |
 | OpenAI-compatible LLM integration for chat | ✅ Done |
-| Vector database integration (ChromaDB) | 🚧 In Progress |
-| User session management | ⏳ Not Started |
-| Ollama LLM integration for chat | ⏳ Not Started |
-| First PyPI release (fixed parser + fixed chunking) | ⏳ Not Started |
+| Vector database integration (ChromaDB) | ✅ Done |
+| User session management | ✅ Done |
+| Ollama LLM integration for chat | 🚧 In Progress |
+| First PyPI release (fixed parser + fixed chunking) | 🚧 In Progress |
 | Support multiple parser engines | ⏳ Not Started |
 | Add configurable parser selection in UI | ⏳ Not Started |
 | Release with multiple parser support | ⏳ Not Started |
@@ -57,6 +57,11 @@ All shared state is stored in Streamlit's `st.session_state` dictionary and is a
 | `chat_llm` | `LLM` | Loaded LLM instance used to answer user queries in the chat interface |
 | `llm_logged` | `bool` | Whether the LLM has been initialised and logged for this session |
 | `messages` | `list` | List of chat messages in the current conversation |
+| `VECTOR_STORE_NAME` | `str` | Name of the vector store used for storing and retrieving document embeddings |
+| `vector_store_config` | `dict` | Configuration dictionary for the selected vector store (e.g. persistence directory, collection name, distance metric) |
+| `vector_store_logged` | `bool` | Whether the vector store has been initialised and logged for this session |
+| `collection_results` | `dict` | Cached results retrieved from the vector store collection, containing chunk texts and metadata |
+| `collection_documents` | `dict` | Documents grouped by source_id, where each key is a document identifier and each value contains the associated chunks and metadata used by the Collection page |
 
 # Installation
 

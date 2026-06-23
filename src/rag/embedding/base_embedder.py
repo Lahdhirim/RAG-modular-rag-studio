@@ -17,6 +17,6 @@ class BaseEmbedding(ABC):
     @abstractmethod
     def embed_query(
         self,
-        text: str,
+        query: str,
     ):
         pass

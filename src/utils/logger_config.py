@@ -37,5 +37,10 @@ processing_job_logger = create_logger(
     "processing_job_logger", "logs/processing_job.log", propagate=False
 )
 
+# Vector store logger
+vector_store_logger = create_logger(
+    "vector_store_logger", "logs/vector_store.log", propagate=False
+)
+
 # Logger for chat interactions
 chat_logger = create_logger("chat_logger", "logs/chat.log", propagate=False)

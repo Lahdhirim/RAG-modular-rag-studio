@@ -1,7 +1,8 @@
 {   
     "directory_config": {
         "copied_pdfs_dir": "outputs/copied_pdfs",
-        "parsing_outputs_dir": "outputs/parsing_outputs"
+        "parsing_outputs_dir": "outputs/parsing_outputs",
+        "chunking_outputs_dir": "outputs/chunking_outputs"
     },
     "parsing_config":{
         "docling": {
@@ -19,6 +20,16 @@
         "hugging_face": {
             "enabled": true,
             "params": {"embedding_model": "sentence-transformers/all-MiniLM-L6-v2"}
+        }
+    },
+    "vector_store_config": {
+        "chroma" : {
+            "enabled": true,
+            "params": {
+                "persist_dir": "./vector_stores/chromaDB",
+                "collection_name": "documents",
+                "distance_metric": "cosine"
+            }
         }
     },
     "retrieval_config": {    

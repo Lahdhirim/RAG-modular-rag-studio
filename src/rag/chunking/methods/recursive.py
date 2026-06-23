@@ -14,17 +14,17 @@ class RecursiveChunker(BaseChunker):
             "chunk_size",
             500,
         )
-        self.chunk_overlap = self.params.get(
+        chunk_overlap = self.params.get(
             "chunk_overlap",
             50,
         )
         logger.info(
-            f"Initialized RecursiveCharacterTextSplitter with chunk_size={chunk_size} and chunk_overlap={self.chunk_overlap}"
+            f"Initialized RecursiveCharacterTextSplitter with chunk_size={chunk_size} and chunk_overlap={chunk_overlap}"
         )
 
         self.chunker = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
-            chunk_overlap=self.chunk_overlap,
+            chunk_overlap=chunk_overlap,
         )
 
     def chunk(self, text: str):

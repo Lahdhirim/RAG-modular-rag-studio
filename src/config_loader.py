@@ -32,6 +32,9 @@ class DirectoryConfig(BaseModel):
     parsing_outputs_dir: Optional[str] = Field(
         default="outputs/parsing_outputs", description="Directory for parsing outputs"
     )
+    chunking_outputs_dir: Optional[str] = Field(
+        default="outputs/chunking_outputs", description="Directory for chunking outputs"
+    )
 
 
 ################## Parsing Configuration ##################
@@ -55,6 +58,14 @@ class EmbeddingMethodConfig(BaseModel):
     enabled: bool = Field(..., description="Whether the embedding method is enabled")
     params: Optional[Dict[str, Any]] = Field(
         default=None, description="Parameters specific to the selected embedding method"
+    )
+
+
+################## Vector Store Configuration ##################
+class VectorStoreConfig(BaseModel):
+    enabled: bool = Field(..., description="Whether the vector store is enabled")
+    params: Optional[Dict[str, Any]] = Field(
+        default=None, description="Parameters specific to the selected vector store"
     )
 
 
@@ -88,6 +99,7 @@ class LLMProviderConfig(BaseModel):
 AllowedParserNames = Literal["docling"]
 AllowedChunkerNames = Literal["recursive_character"]
 AllowedEmbeddingNames = Literal["hugging_face"]
+AllowedVectorStoreNames = Literal["chroma"]
 AllowedLLMProviders = Literal["openai"]
 
 
@@ -103,6 +115,9 @@ class StudioRAGConfig(BaseModel):
     )
     embedding_config: Dict[AllowedEmbeddingNames, EmbeddingMethodConfig] = Field(
         ..., description="Embedding configuration"
+    )
+    vector_store_config: Dict[AllowedVectorStoreNames, VectorStoreConfig] = Field(
+        ..., description="Vector store configuration"
     )
     retrieval_config: RetrievalConfig = Field(
         ..., description="Retrieval configuration"
@@ -121,30 +136,38 @@ class StudioRAGConfig(BaseModel):
 
         validate_single_enabled(self.embedding_config, "embedding")
 
+        validate_single_enabled(self.vector_store_config, "vector store")
+
         validate_max_one_enabled(self.llm_config, "LLM provider")
 
         return self
 
     # Get the selected parser and its config
-    def get_selected_parser(self):
+    def get_selected_parser(self) -> tuple[str, ParsingMethodConfig]:
         for name, cfg in self.parsing_config.items():
             if cfg.enabled:
                 return name, cfg
 
     # Get the selected chunking method and its config
-    def get_selected_chunker(self):
+    def get_selected_chunker(self) -> tuple[str, ChunkingMethodConfig]:
         for name, cfg in self.chunking_config.items():
             if cfg.enabled:
                 return name, cfg
 
     # Get the selected embedding method and its config
-    def get_selected_embedder(self):
+    def get_selected_embedder(self) -> tuple[str, EmbeddingMethodConfig]:
         for name, cfg in self.embedding_config.items():
             if cfg.enabled:
                 return name, cfg
 
+    # Get the selected vector store and its config
+    def get_selected_vector_store(self) -> tuple[str, VectorStoreConfig]:
+        for name, cfg in self.vector_store_config.items():
+            if cfg.enabled:
+                return name, cfg
+
     # Get the selected LLM provider and its config
-    def get_selected_llm_provider(self):
+    def get_selected_llm_provider(self) -> tuple[str | None, LLMProviderConfig | None]:
         for name, cfg in self.llm_config.items():
             if cfg.enabled:
                 return name, cfg
