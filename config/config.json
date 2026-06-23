@@ -25,7 +25,6 @@
     "vector_store_config": {
         "chroma" : {
             "enabled": true,
-            "enable_replacement": false,
             "params": {
                 "persist_dir": "./vector_stores/chromaDB",
                 "collection_name": "documents",

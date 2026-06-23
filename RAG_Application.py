@@ -284,7 +284,7 @@ Go to the **Chat** page to:
 ---
 
 ### 4. 📚 View Documents
-Visit the **Documents** page to:
+Visit the **Collection** page to:
             
     - See parsed results  
     - Explore generated chunks  

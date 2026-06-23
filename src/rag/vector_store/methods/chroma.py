@@ -1,7 +1,6 @@
 import chromadb
 
 from src.rag.vector_store.base_vector_store import BaseVectorStore
-from src.utils.logger_config import vector_store_logger
 from src.utils.schema import ChunksSchema, RetrievalSchema
 
 
@@ -80,22 +79,6 @@ class ChromaVectorStore(BaseVectorStore):
                 )
 
         return output
-
-    def delete(self, ids: list[str]) -> None:
-        """Delete chunks by IDs from ChromaDB."""
-        self.collection.delete(ids=ids)
-        vector_store_logger.warning(f"Deleted {len(ids)} chunks with IDs: {ids}")
-
-    def clear(self) -> None:
-        """Clear all chunks from ChromaDB collection."""
-        # Get all IDs and delete them
-        all_results = self.collection.get()
-        if all_results["ids"]:
-            all_results_ids = all_results["ids"]
-            self.delete(ids=all_results_ids)
-            vector_store_logger.warning(
-                f"Deleted {len(all_results_ids)} chunks with IDs: {all_results_ids}"
-            )
 
     def get(
         self,

@@ -14,7 +14,13 @@ if not st.session_state.get(SessionStateSchema.AUTHENTICATED, False):
     st.warning("You need to log in first to access this page.")
     st.stop()
 
+# Get vector store instance
+vector_store = st.session_state[SessionStateSchema.VECTOR_STORE]
+existing_source_ids = vector_store.get_source_ids()
+collection_name = vector_store.collection_name
+
 st.title("📤 Upload PDFs")
+st.info(f"🗄️ Current used collection: {collection_name}")
 
 # Get current job status
 job = st.session_state.get(SessionStateSchema.CURRENT_JOB, None)
@@ -29,10 +35,6 @@ if SessionStateSchema.PARSING_RESULTS not in st.session_state:
 if SessionStateSchema.SCANNED_MAP not in st.session_state:
     st.session_state[SessionStateSchema.SCANNED_MAP] = {}
 scanned_map = st.session_state[SessionStateSchema.SCANNED_MAP]
-
-# Get vector store instance
-vector_store = st.session_state[SessionStateSchema.VECTOR_STORE]
-existing_source_ids = vector_store.get_source_ids()
 
 # Upload and process PDFs
 if uploaded_files:
@@ -54,10 +56,10 @@ if uploaded_files:
 
             if file_id in existing_source_ids:
                 st.warning(
-                    f"File {uploaded_file.name} has already been processed. Skipping."
+                    f"File {uploaded_file.name} is already in the collection. Skipping."
                 )
                 logger.warning(
-                    f"File {uploaded_file.name} with ID {file_id} has already been processed. Skipping."
+                    f"File {uploaded_file.name} with ID {file_id} is already in the collection. Skipping."
                 )
                 skipped_files.append(uploaded_file.name)
                 continue
@@ -172,6 +174,10 @@ if job is not None:
             embeddings=embeddings,
             chunks=chunks,
             metadata=metadatas,
+        )
+        st.session_state.pop(
+            SessionStateSchema.COLLECTION_RESULTS,
+            None,
         )
         logger.info(
             f"Injected {len(job.chunks)} chunks into vector store for job {job.job_id}"

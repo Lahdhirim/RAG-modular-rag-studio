@@ -44,20 +44,6 @@ class BaseVectorStore(ABC):
         pass
 
     @abstractmethod
-    def delete(self, ids: list[str]) -> None:
-        """Delete chunks by IDs.
-
-        Args:
-            ids: List of chunk IDs to delete.
-        """
-        pass
-
-    @abstractmethod
-    def clear(self) -> None:
-        """Clear all chunks from the vector store."""
-        pass
-
-    @abstractmethod
     def get(
         self,
         ids: list[str] | None = None,

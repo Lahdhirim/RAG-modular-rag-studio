@@ -40,6 +40,8 @@ class SessionStateSchema:
     VECTOR_STORE_NAME = "vector_store_name"
     VECTOR_STORE_CONFIG = "vector_store_config"
     VECTOR_STORE_LOGGED = "vector_store_logged"
+    COLLECTION_RESULTS = "collection_results"
+    COLLECTION_DOCUMENTS = "collection_documents"
 
 
 class InputFileSchema:
