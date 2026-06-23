@@ -1,6 +1,7 @@
 import chromadb
 
 from src.rag.vector_store.base_vector_store import BaseVectorStore
+from src.utils.logger_config import vector_store_logger
 from src.utils.schema import ChunksSchema, RetrievalSchema
 
 
@@ -26,14 +27,17 @@ class ChromaVectorStore(BaseVectorStore):
         # Initialize Chroma client
         if persist_dir:
             self.client = chromadb.PersistentClient(path=persist_dir)
+            vector_store_logger.info(f"Using persistent ChromaDB at {persist_dir}")
         else:
             self.client = chromadb.EphemeralClient()
+            vector_store_logger.info("Using ephemeral ChromaDB")
 
         # Get or create collection
         self.collection = self.client.get_or_create_collection(
             name=self.collection_name,
             metadata={"hnsw:space": self.distance_metric},
         )
+        vector_store_logger.info(f"Using ChromaDB collection: {self.collection_name}")
 
     def store(
         self,
@@ -52,6 +56,9 @@ class ChromaVectorStore(BaseVectorStore):
             documents=chunks,
             metadatas=metadata,
         )
+        vector_store_logger.info(
+            f"Stored {len(ids)} documents in ChromaDB collection: {self.collection_name}"
+        )
 
     def search(self, query_embedding: list[float], top_k: int = 5) -> list[dict]:
         """Search for similar chunks using query embedding.
@@ -59,6 +66,10 @@ class ChromaVectorStore(BaseVectorStore):
         Returns:
             List of dictionaries with keys: 'id', 'text', 'score', 'metadata'.
         """
+        vector_store_logger.info(
+            f"Searching for top {top_k} similar chunks for query in ChromaDB collection: {self.collection_name}"
+        )
+
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
@@ -78,6 +89,9 @@ class ChromaVectorStore(BaseVectorStore):
                     }
                 )
 
+        vector_store_logger.info(
+            f"Found {len(output)} results for query in ChromaDB collection: {self.collection_name}"
+        )
         return output
 
     def get(
@@ -107,3 +121,13 @@ class ChromaVectorStore(BaseVectorStore):
     def count(self) -> int:
         """Return the number of documents in the ChromaDB collection."""
         return self.collection.count()
+
+    def delete_source(self, source_id: str) -> None:
+        self.collection.delete(
+            where={
+                ChunksSchema.SOURCE_ID: source_id,
+            }
+        )
+        vector_store_logger.info(
+            f"Deleted document with source_id={source_id} from ChromaDB collection: {self.collection_name}"
+        )

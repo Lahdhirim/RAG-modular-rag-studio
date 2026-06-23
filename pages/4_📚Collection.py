@@ -58,10 +58,36 @@ for source_id, chunks in documents_by_source.items():
     st.write(f"**Scanned:** {is_scanned}")
     st.write(f"**Chunks:** {len(chunks)}")
 
-    show_chunks = st.toggle(
-        "Show chunks",
-        key=f"toggle_{source_id}",
-    )
+    col1, col2 = st.columns([5, 1])
+
+    with col1:
+        show_chunks = st.toggle(
+            "Show chunks",
+            key=f"toggle_{source_id}",
+        )
+
+    with col2:
+        if st.button(
+            "🗑️ Delete",
+            key=f"delete_{source_id}",
+            type="primary",
+            help="Delete this document and all its chunks from the current collection.",
+        ):
+            vector_store.delete_source(source_id)
+
+            # Invalidate cache
+            st.session_state.pop(
+                SessionStateSchema.COLLECTION_RESULTS,
+                None,
+            )
+            st.session_state.pop(
+                SessionStateSchema.COLLECTION_DOCUMENTS,
+                None,
+            )
+
+            logger.info(f"Deleted document '{source}' " f"(source_id={source_id})")
+
+            st.rerun()
 
     if show_chunks:
         for i, (doc, _) in enumerate(chunks, start=1):

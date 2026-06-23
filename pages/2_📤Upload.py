@@ -175,8 +175,13 @@ if job is not None:
             chunks=chunks,
             metadata=metadatas,
         )
+        # Invalidate cache
         st.session_state.pop(
             SessionStateSchema.COLLECTION_RESULTS,
+            None,
+        )
+        st.session_state.pop(
+            SessionStateSchema.COLLECTION_DOCUMENTS,
             None,
         )
         logger.info(

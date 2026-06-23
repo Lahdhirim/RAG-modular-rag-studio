@@ -60,3 +60,8 @@ class BaseVectorStore(ABC):
     def count(self) -> int:
         """Return the number of chunks in the vector store."""
         pass
+
+    @abstractmethod
+    def delete_source(self, source_id: str) -> None:
+        """Delete all chunks belonging to a source document."""
+        pass
