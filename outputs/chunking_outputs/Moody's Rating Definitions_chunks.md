@@ -72,6 +72,7 @@ Moody's employs the following designations, all judged to be investment grade; t
 
 - P-1 Issuers (or supporting institutions) rated Prime-~ have superi ability repay short-term debt obligations.
 - P-2 Issuers (or supporting institutions) rated Prime-2 have strong ability to repay short-term debt obligations.
+- P-3 Issuers (or supporting institutions) rated Prime-3 have an
 
 ---
 
@@ -81,7 +82,7 @@ Moody's employs the following designations, all judged to be investment grade; t
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-- P-3 Issuers (or supporting institutions) rated Prime-3 have an acceptable ability to repay short-term obligations:
+supporting institutions) rated Prime-3 have an acceptable ability to repay short-term obligations:
 
 ---
 
@@ -125,7 +126,7 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Aaa   | Obligations rated Aaa arejudgedtobeofthehighest quality; with minimal risk                                                                            |
+| Aaa   | Obligations rated Aaa arejudgedtobeofthehighest quality; with minimal risk
 
 ---
 
@@ -135,7 +136,9 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
+|
 |-------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Aa    | Obligations rated Aa are judged to be of high quality and are subject to
 
 ---
 
@@ -145,7 +148,9 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Aa    | Obligations rated Aa are judged to be of high quality and are subject to very low credit risk.                                                        |
+judged to be of high quality and are subject to very low credit risk.                                                        |
+|       | Obligations rated are considered upper-medium-grade and are sub- ject - Iow credit risk.                                                              |
+| Baa   |
 
 ---
 
@@ -155,7 +160,9 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-|       | Obligations rated are considered upper-medium-grade and are sub- ject - Iow credit risk.                                                              |
+|
+| Baa   | Obligations rated Baa are subject to moderate credit risk. They are consid- ered medium-grade and as such may possess speculative characteristics.    |
+| Ba    | Obligations rated Ba are judged to have speculative lements and are subject to
 
 ---
 
@@ -165,7 +172,9 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Baa   | Obligations rated Baa are subject to moderate credit risk. They are consid- ered medium-grade and as such may possess speculative characteristics.    |
+to have speculative lements and are subject to substantial credit risk.                                               |
+|       | considered to Obligations rated are high credit risk                                                                                                  |
+| Caa   |
 
 ---
 
@@ -175,7 +184,9 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Ba    | Obligations rated Ba are judged to have speculative lements and are subject to substantial credit risk.                                               |
+|
+| Caa   | Obligations rated Caa are judged to be of poor standing and are subject to very high credit risk.                                                     |
+| Ca    | Obligations rated Ca are highly speculative and are likely in, or very near; default,
 
 ---
 
@@ -185,7 +196,8 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-|       | considered to Obligations rated are high credit risk                                                                                                  |
+and are likely in, or very near; default, with some prospect of recovery in principal and interest.       |
+|       | Obligations rated C are the lowest-rated class of bonds and are typical - ly in default, with little prospect for recovery of principal and interest. |
 
 ---
 
@@ -195,7 +207,7 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Caa   | Obligations rated Caa are judged to be of poor standing and are subject to very high credit risk.                                                     |
+Note Moodys appends numerical modifiers and each generic rating classification from Aa through Caa. The modifier indicates that the obligation ranks the higher end of its generic rating category; the modifier indicates mid-range ranking; and the modifier indicates ranking the lower end of that
 
 ---
 
@@ -205,7 +217,7 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-| Ca    | Obligations rated Ca are highly speculative and are likely in, or very near; default, with some prospect of recovery in principal and interest.       |
+modifier indicates ranking the lower end of that generic rating category.
 
 ---
 
@@ -215,7 +227,7 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-|       | Obligations rated C are the lowest-rated class of bonds and are typical - ly in default, with little prospect for recovery of principal and interest. |
+Bank Financial Strength Rating Definitions
 
 ---
 
@@ -225,7 +237,8 @@ reflect both the likelihood of default and any financial loss suffered in the ev
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-Note Moodys appends numerical modifiers and each generic rating classification from Aa through Caa. The modifier indicates that the obligation ranks the higher end of its generic rating category; the modifier indicates mid-range ranking; and the modifier indicates ranking the lower end of that
+- Banks rated possess superior intrinsic financial strength. Typically; they will be institutions with highly valuable and defensible business franchises, strong financial fundamentals, and very predictable; stable operating environment
+- Banks rated possess strong intrinsic financial strength.
 
 ---
 
@@ -235,7 +248,8 @@ Note Moodys appends numerical modifiers and each generic rating classification f
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-modifier indicates ranking the lower end of that generic rating category.
+possess strong intrinsic financial strength. Typically; they will be institutions with valuable and defensible business franchises, good finan cial fundamentals, and predictable and stable operating environment.
+- Banks rated possess adequate intrinsic financial strength. Typically; they will be
 
 ---
 
@@ -245,7 +259,7 @@ modifier indicates ranking the lower end of that generic rating category.
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-Bank Financial Strength Rating Definitions
+financial strength. Typically; they will be institutions with more limited but still valuable business franchises. These banks will display either acceptable financial fundamentals within predictable and stable operating environment; or good financial fundamentals within less predictable and stable
 
 ---
 
@@ -255,7 +269,8 @@ Bank Financial Strength Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-- Banks rated possess superior intrinsic financial strength. Typically; they will be institutions with highly valuable and defensible business franchises, strong financial fundamentals, and very predictable; stable operating environment
+fundamentals within less predictable and stable operating environment.
+- Banks rated display modest intrinsic financial strength, potentially requiring or some outside support at times. Such institutions may be limited by one more of the following factors: weak business franchise; financial
 
 ---
 
@@ -265,7 +280,8 @@ Bank Financial Strength Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-- Banks rated possess strong intrinsic financial strength. Typically; they will be institutions with valuable and defensible business franchises, good finan cial fundamentals, and predictable and stable operating environment.
+factors: weak business franchise; financial fundamentals that are deficient one or more respects; or an unpredictable and unstable operating environment.
+- Banks rated E display very modest intrinsic financial strength; with high likelihood of periodic outside support or an eventual need for
 
 ---
 
@@ -275,7 +291,7 @@ Bank Financial Strength Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-- Banks rated possess adequate intrinsic financial strength. Typically; they will be institutions with more limited but still valuable business franchises. These banks will display either acceptable financial fundamentals within predictable and stable operating environment; or good financial
+periodic outside support or an eventual need for outside assistance. Such institutions may be limited by one or more of the following factors: weak and limited business franchise; financial fundamentals that are materially deficient in one or more respects; or highly unpredictable or unstable
 
 ---
 
@@ -285,51 +301,11 @@ Bank Financial Strength Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-stable operating environment; or good financial fundamentals within less predictable and stable operating environment.
+respects; or highly unpredictable or unstable operating environment.
 
 ---
 
 # Chunk 29
-
-**Source:** Moody's Rating Definitions
-**Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
-**Scanned:** True
-
-- Banks rated display modest intrinsic financial strength, potentially requiring or some outside support at times. Such institutions may be limited by one more of the following factors: weak business franchise; financial fundamentals that are deficient one or more respects; or an unpredictable and
-
----
-
-# Chunk 30
-
-**Source:** Moody's Rating Definitions
-**Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
-**Scanned:** True
-
-one or more respects; or an unpredictable and unstable operating environment.
-
----
-
-# Chunk 31
-
-**Source:** Moody's Rating Definitions
-**Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
-**Scanned:** True
-
-- Banks rated E display very modest intrinsic financial strength; with high likelihood of periodic outside support or an eventual need for outside assistance. Such institutions may be limited by one or more of the following factors: weak and limited business franchise; financial fundamentals that
-
----
-
-# Chunk 32
-
-**Source:** Moody's Rating Definitions
-**Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
-**Scanned:** True
-
-business franchise; financial fundamentals that are materially deficient in one or more respects; or highly unpredictable or unstable operating environment.
-
----
-
-# Chunk 33
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -343,7 +319,7 @@ Long-Term Debt Ratings
 
 ---
 
-# Chunk 34
+# Chunk 30
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -353,7 +329,7 @@ Opinions of relative credit risk of fixed-income obligations with an original ma
 
 ---
 
-# Chunk 35
+# Chunk 31
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -363,7 +339,7 @@ of default and any financial loss suffered the event of default.
 
 ---
 
-# Chunk 36
+# Chunk 32
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -379,7 +355,7 @@ Opinions of the ability of entities honor senior unsecured financial obligations
 
 ---
 
-# Chunk 37
+# Chunk 33
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -391,7 +367,7 @@ Moody's Corporate Family Ratings are generally employed for speculative grade co
 
 ---
 
-# Chunk 38
+# Chunk 34
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -402,7 +378,7 @@ Moody's Corporate Family Ratings are generally employed for speculative grade co
 
 ---
 
-# Chunk 39
+# Chunk 35
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -414,7 +390,7 @@ Bank Ratings
 
 ---
 
-# Chunk 40
+# Chunk 36
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -426,7 +402,7 @@ Moody's will typically assign ratings to bank = Bank Deposit Ratings and Bank Fi
 
 ---
 
-# Chunk 41
+# Chunk 37
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -436,7 +412,7 @@ Bank Deposit Ratings Opinions of a banks ability to repay punctually its foreign
 
 ---
 
-# Chunk 42
+# Chunk 38
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -446,7 +422,7 @@ performance of the rated bank with respect to its foreign and/or domestic curren
 
 ---
 
-# Chunk 43
+# Chunk 39
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -458,7 +434,7 @@ Insurance Financial Strength Ratings
 
 ---
 
-# Chunk 44
+# Chunk 40
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -472,7 +448,7 @@ National Scale Ratings
 
 ---
 
-# Chunk 45
+# Chunk 41
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -486,7 +462,7 @@ Money Market and Bond Fund Ratings
 
 ---
 
-# Chunk 46
+# Chunk 42
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -500,27 +476,27 @@ About the Company
 
 ---
 
-# Chunk 47
+# Chunk 43
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-Moody' Investors Service among the worlds most respected, widely utilized sources for credit ratings, research and risk analysis. In addition our core ratings business, Moodys publishes market leading credit opinions; deal research and commentary; serving more than 300 customer accounts at some 400
+Moody' Investors Service among the worlds most respected, widely utilized sources for credit ratings, research and risk analysis. In addition our core ratings business, Moodys publishes market leading credit opinions; deal research and commentary; serving more than 300 customer accounts at some
 
 ---
 
-# Chunk 48
+# Chunk 44
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
 **Scanned:** True
 
-more than 300 customer accounts at some 400 institutions around the globe
+serving more than 300 customer accounts at some 400 institutions around the globe
 
 ---
 
-# Chunk 49
+# Chunk 45
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -535,7 +511,7 @@ Moody's independence and integrity have earned us the trust of capimarket partic
 
 ---
 
-# Chunk 50
+# Chunk 46
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -545,7 +521,7 @@ Credit ratings and research help investors analyze the credit risks associated w
 
 ---
 
-# Chunk 51
+# Chunk 47
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -555,7 +531,7 @@ and derivative transactions, by providing credible and independent assessments o
 
 ---
 
-# Chunk 52
+# Chunk 48
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -565,7 +541,7 @@ Moody's default studies validate our predictive ratings. Published research and 
 
 ---
 
-# Chunk 53
+# Chunk 49
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -575,7 +551,7 @@ In addition to its services Moodys publishes investor-oriented credit research; 
 
 ---
 
-# Chunk 54
+# Chunk 50
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -585,7 +561,7 @@ number of channels; most of Moody's clients use www.moodys com for access such s
 
 ---
 
-# Chunk 55
+# Chunk 51
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -595,7 +571,7 @@ Moodys maintains offices most the worlds major financial centers and employs app
 
 ---
 
-# Chunk 56
+# Chunk 52
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -607,7 +583,7 @@ About Moody's Corporation
 
 ---
 
-# Chunk 57
+# Chunk 53
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -617,7 +593,7 @@ Moody's Corporation (NYSE:MCO the parent company of the Moody's Investors Servic
 
 ---
 
-# Chunk 58
+# Chunk 54
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be
@@ -627,7 +603,7 @@ which reported revenue of $2.0 billion in 2006, employs approximately 000 people
 
 ---
 
-# Chunk 59
+# Chunk 55
 
 **Source:** Moody's Rating Definitions
 **Source ID:** 1c6f9a72eb909edeb24108c2639eb86dab7d1f4ac6db12a554d5e8f5e5ad61be

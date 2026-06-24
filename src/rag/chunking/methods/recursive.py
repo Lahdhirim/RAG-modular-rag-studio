@@ -18,13 +18,15 @@ class RecursiveChunker(BaseChunker):
             "chunk_overlap",
             50,
         )
+        separators = self.params.get("separators", ["\n\n", " ", ""])
         logger.info(
-            f"Initialized RecursiveCharacterTextSplitter with chunk_size={chunk_size} and chunk_overlap={chunk_overlap}"
+            f"Initialized RecursiveCharacterTextSplitter with chunk_size={chunk_size} | chunk_overlap={chunk_overlap} | separators={separators}"
         )
 
         self.chunker = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
+            separators=separators,
         )
 
     def chunk(self, text: str):
